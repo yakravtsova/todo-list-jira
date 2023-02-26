@@ -1,1 +1,7 @@
 node_modules
+
+credentials.json
+
+log.log
+
+yarn.lock

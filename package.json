@@ -28,7 +28,9 @@
     "@atlaskit/section-message": "^6.3.9",
     "@atlaskit/select": "^16.1.5",
     "@atlaskit/textfield": "^5.3.6",
+    "@reduxjs/toolkit": "^1.9.3",
     "atlassian-connect-express": "^7.11.0",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
@@ -43,7 +45,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-is": "^18.2.0",
-    "redux": "^4.2.1",
+    "react-redux": "^8.0.5",
     "sequelize": "^6.19.1",
     "styled-components": "^5.2.0"
   },

@@ -239,39 +239,112 @@ const FormDefaultExample = () => /*#__PURE__*/_react.default.createElement("div"
 }, "Sign up"))))));
 var _default = FormDefaultExample;
 exports.default = _default;
-},{}],"hello-world.jsx":[function(require,module,exports) {
+},{}],"../src/features/issues/issueSlice.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = HelloWorld;
+exports.issueSlice = exports.fetchIssues = exports.default = void 0;
+var _toolkit = require("@reduxjs/toolkit");
+//import axios from "axios";
+
+const initialState = {
+  loading: false,
+  issues: [],
+  error: ''
+};
+const fetchIssues = (0, _toolkit.createAsyncThunk)('issue/fetchIssues',
+/*() => {
+return axios
+.get('/issues')
+.then(res => {
+res.issues.map(issue => {
+const fields = issue.fields;
+const creator = fields.creator;
+return {
+avatar: creator.avatarUrls,
+name: creator.displayName,
+summary: fields.summary,
+status: fields.status.name,
+updated: fields.updated,
+}
+}
+)})
+}*/
+async () => {
+  return await fetch('/issue', {
+    method: "GET",
+    'Accept': 'application/json'
+  }).then(res => {
+    return res.json();
+  }).then(res => {
+    return res.issues.map(issue => {
+      const fields = issue.fields;
+      const creator = fields.creator;
+      return {
+        avatar: creator.avatarUrls,
+        name: creator.displayName,
+        summary: fields.summary,
+        status: fields.status.name,
+        updated: fields.updated
+      };
+    });
+  }).then(res => {
+    //  console.log(res);
+    return res;
+  }).catch(err => console.error(err));
+});
+exports.fetchIssues = fetchIssues;
+const issueSlice = (0, _toolkit.createSlice)({
+  name: 'issue',
+  initialState,
+  extraReducers: builder => {
+    builder.addCase(fetchIssues.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(fetchIssues.fulfilled, (state, action) => {
+      state.loading = false;
+      state.issues = action.payload;
+      state.error = '';
+    });
+    builder.addCase(fetchIssues.rejected, (state, action) => {
+      state.loading = false;
+      state.issues = [];
+      state.error = action.error.message;
+    });
+  }
+});
+exports.issueSlice = issueSlice;
+var _default = issueSlice.reducer;
+exports.default = _default;
+},{}],"App.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = App;
 var _dynamicTable = _interopRequireDefault(require("@atlaskit/dynamic-table"));
 var _checkbox = require("@atlaskit/checkbox");
 var _standardButton = _interopRequireDefault(require("@atlaskit/button/standard-button"));
 var _trash = _interopRequireDefault(require("@atlaskit/icon/glyph/trash"));
 var _badge = _interopRequireDefault(require("@atlaskit/badge"));
 var _formDefault = _interopRequireDefault(require("./formDefault"));
+var _reactRedux = require("react-redux");
 var _react = _interopRequireWildcard(require("react"));
+var _issueSlice = require("../src/features/issues/issueSlice");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function HelloWorld() {
+function App() {
   const [excitementLevel, setExcitementLevel] = _react.default.useState(0);
   const [arrOfIssues, setArrOfIssues] = (0, _react.useState)([]);
   const [arrOfProjects, setArrOfProjects] = (0, _react.useState)([]);
+  const dispatch = (0, _reactRedux.useDispatch)();
+  const issue = (0, _reactRedux.useSelector)(state => state.issue);
   (0, _react.useEffect)(() => {
-    async function fetchData() {
-      const result = await fetch('/issue', {
-        method: "GET",
-        'Accept': 'application/json'
-      }).then(res => {
-        return res.json();
-      }).then(res => {
-        setArrOfIssues(res.issues);
-      }).catch(err => console.error(err));
-    }
-    fetchData();
+    dispatch((0, _issueSlice.fetchIssues)());
   }, []);
 
   // useEffect(() => {
@@ -295,7 +368,9 @@ function HelloWorld() {
   const pieceOfIssue = () => {
     return /*#__PURE__*/_react.default.createElement("div", null);
   };
-  const testRows = arrOfIssues.map((issue, index) => {
+
+  //testRows with Redux data
+  const testRows = issue.issues.map((issue, index) => {
     return {
       key: `issue-row-${index}`,
       cells: [{
@@ -307,17 +382,17 @@ function HelloWorld() {
             gap: '10px'
           }
         }, /*#__PURE__*/_react.default.createElement("img", {
-          src: issue.fields.creator.avatarUrls['24x24'],
+          src: issue.avatar['24x24'],
           style: {
             borderRadius: '50%'
           }
-        }), /*#__PURE__*/_react.default.createElement("strong", null, issue.fields.creator.displayName))
+        }), /*#__PURE__*/_react.default.createElement("strong", null, issue.name))
       }, {
         key: 'issue-row-summary',
-        content: issue.fields.summary
+        content: issue.summary
       }, {
         key: 'issue-row-status',
-        content: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_badge.default, null, issue.fields.status.name), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("small", null, issue.fields.updated))
+        content: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_badge.default, null, issue.status), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("small", null, issue.updated))
       }, {
         key: 'issue-row-checkbox',
         content: /*#__PURE__*/_react.default.createElement(_checkbox.Checkbox, {
@@ -412,9 +487,264 @@ function HelloWorld() {
     rows: testRows,
     rowsPerPage: 5,
     defaultPage: 1,
-    loadingSpinnerSize: "small"
-    //isLoading
+    loadingSpinnerSize: "small",
+    isLoading: issue.loading
   }));
 }
-},{"./formDefault":"formDefault.jsx"}]},{},["hello-world.jsx"], null)
+},{"./formDefault":"formDefault.jsx","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js"}],"../src/app/store.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _toolkit = require("@reduxjs/toolkit");
+var _issueSlice = _interopRequireDefault(require("../features/issues/issueSlice"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const store = (0, _toolkit.configureStore)({
+  reducer: {
+    issue: _issueSlice.default
+  }
+});
+var _default = store;
+exports.default = _default;
+},{"../features/issues/issueSlice":"../src/features/issues/issueSlice.js"}],"hello-world.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = HelloWorld;
+var _react = _interopRequireDefault(require("react"));
+var _App = _interopRequireDefault(require("./App"));
+var _store = _interopRequireDefault(require("../src/app/store"));
+var _reactRedux = require("react-redux");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+/*import DynamicTable from '@atlaskit/dynamic-table';
+import { Checkbox } from '@atlaskit/checkbox';
+import Button from '@atlaskit/button/standard-button';
+import TrashIcon from '@atlaskit/icon/glyph/trash';
+import Badge from '@atlaskit/badge';
+import FormDefaultExample from './formDefault';
+
+import React, { useState, useEffect } from 'react';
+
+export default function HelloWorld() {
+  const [excitementLevel, setExcitementLevel] = React.useState(0);
+  const [arrOfIssues, setArrOfIssues] = useState([]);
+  const [arrOfProjects, setArrOfProjects] = useState([]);
+
+  useEffect(() => {
+    async function fetchData(){
+      const result = await fetch('/issue', {
+        method: "GET",
+        'Accept': 'application/json',
+      })
+      .then(res => {
+        return res.json();
+      })
+      .then(res => {
+        setArrOfIssues(res.issues);
+      })
+      .catch(err => console.error(err))
+    
+    }
+    fetchData();
+  }, []);
+
+  // useEffect(() => {
+  //   async function fetchData(){
+  //     const result = await fetch('/projects', {
+  //       method: "GET",
+  //       'Accept': 'application/json',
+  //     })
+  //     .then(res => {
+  //       return res.json();
+  //     })
+  //     .then(res => {
+  //       setArrOfProjects(res.values);
+  //     })
+  //     .catch(err => console.error(err))
+    
+  //   }
+  //   fetchData();
+  // }, []);
+
+    const pieceOfIssue = () => {
+      return(
+        <div></div>
+      );
+    }
+
+    const testRows = arrOfIssues.map((issue,index) => {
+      return {
+        key : `issue-row-${index}`,
+        cells : [
+          {
+            key: 'issue-row-creator',
+            content: (
+              <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+                <img src={issue.fields.creator.avatarUrls['24x24']} style={{borderRadius:'50%'}}/>
+                <strong>{issue.fields.creator.displayName}</strong>
+              </div>
+            )
+          },
+          {
+            key: 'issue-row-summary',
+            content: issue.fields.summary
+          },
+          {
+            key: 'issue-row-status',
+            content: (
+            <>
+              <Badge>{issue.fields.status.name}</Badge>
+              <br/>
+              <small>{issue.fields.updated}</small>
+            </>
+            )
+          },
+          {
+            key: 'issue-row-checkbox',
+            content: (
+            <Checkbox
+              value="default checkbox"
+              //label="Default checkbox"
+              //onChange={}
+              name="checkbox-default"
+              testId="cb-default"
+            />
+            )
+          },
+          {
+            key: 'issue-row-delete',
+            content: (
+            <Button
+              appearance="subtle"
+              iconBefore={<TrashIcon size="small" />}
+              //onClick={}
+              ></Button>
+              )
+          }
+        ]
+      }
+    });
+
+    const head = {
+      cells : [
+        {
+          key : 'issue-summary',
+          content : 'Summary'
+        },
+        {
+          key : 'issue-creator',
+          content : 'Creator'
+        },
+        {
+          key : 'issue-status',
+          content : 'Status'
+        },
+        {
+          key : 'issue-checkbox',
+          content : "Checkbox",
+          width : '1'
+        },
+        {
+          key : 'issue-delete',
+          content : 'Delete',
+          width : '1'
+        }
+      ]
+    };
+
+    const testRows2 = [
+      {
+        key : `issue-row-1`,
+        cells : [
+          {
+            key: 'issue-row-creator',
+            content: (
+              <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+                
+                <strong>issue.fields.creator.displayName</strong>
+              </div>
+            )
+          },
+          {
+            key: 'issue-row-summary',
+            content: 'issue.fields.summary'
+          },
+          {
+            key: 'issue-row-status',
+            content: (
+            <>
+              <Badge>issue.fields.status.name</Badge>
+              <br/>
+              <small>issue.fields.updated</small>
+            </>
+            )
+          },
+          {
+            key: 'issue-row-checkbox',
+            content: (
+            <Checkbox
+              value="default checkbox"
+              //label="Default checkbox"
+              //onChange={}
+              name="checkbox-default"
+              testId="cb-default"
+            />
+            )
+          },
+          {
+            key: 'issue-row-delete',
+            content: (
+            <Button
+              appearance="subtle"
+              iconBefore={<TrashIcon size="small" />}
+              //onClick={}
+              ></Button>
+              )
+          }
+        ]
+      }
+    ]
+  
+
+  return (
+    <div style={{
+      padding : '24px',
+      //width:'98%',
+      //margin:'24px auto',
+      boxSizing : 'border-box'
+      }}>
+
+        <div>&nbsp;</div>
+
+        {// <FormDefaultExample /> }
+
+      <div>&nbsp;</div>
+      <h1>TodoList Tasks</h1>
+      <div>&nbsp;</div>
+
+      
+
+      <div>&nbsp;</div>
+
+      <DynamicTable
+        head={head}
+        rows={testRows}
+        rowsPerPage={5}
+        defaultPage={1}
+        loadingSpinnerSize="small"
+        //isLoading
+      />
+    </div>)
+}*/
+
+function HelloWorld() {
+  return /*#__PURE__*/_react.default.createElement(_reactRedux.Provider, {
+    store: _store.default
+  }, /*#__PURE__*/_react.default.createElement(_App.default, null));
+}
+},{"./App":"App.jsx","../src/app/store":"../src/app/store.js"}]},{},["hello-world.jsx"], null)
 //# sourceMappingURL=/hello-world.js.map

@@ -1,4 +1,4 @@
-import DynamicTable from '@atlaskit/dynamic-table';
+/*import DynamicTable from '@atlaskit/dynamic-table';
 import { Checkbox } from '@atlaskit/checkbox';
 import Button from '@atlaskit/button/standard-button';
 import TrashIcon from '@atlaskit/icon/glyph/trash';
@@ -198,7 +198,7 @@ export default function HelloWorld() {
 
         <div>&nbsp;</div>
 
-        {/* <FormDefaultExample /> */}
+        {// <FormDefaultExample /> }
 
       <div>&nbsp;</div>
       <h1>TodoList Tasks</h1>
@@ -217,4 +217,16 @@ export default function HelloWorld() {
         //isLoading
       />
     </div>)
+}*/
+import React from 'react';
+import App from "./App";
+import store from '../src/app/store';
+import {Provider} from 'react-redux';
+
+export default function HelloWorld() {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
 }
