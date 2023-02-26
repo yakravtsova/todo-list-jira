@@ -13,7 +13,7 @@ export default function routes(app, addon) {
       const response = await fetch(`${apiHost}/search`, {
       method: "GET",
       headers: {
-        'Authorization': `Basic ${Buffer.from('margaritaselez@gmail.com:ATATT3xFfGF038S-up11AqXw-8Fxn0Qd_JJ_BJdyCBG6xJpGp4U9NFyBlSsnHHmaClwjUVOqHfpNHUd-zriDNsevkkMJ7tzkUWjkWnJaeR3B5eex1r3zNL6PZhJyDimkJFdAMDzPpPisOvKJ_vE7XgkhKSdV8S3MQHOzFrPGVuQivCfrz_ab48U=10464974').toString('base64')}`,
+        'Authorization': `Basic ${Buffer.from('margaritaselez@gmail.com:<api_token>').toString('base64')}`,
         'Accept': 'application/json',
       }
     })
