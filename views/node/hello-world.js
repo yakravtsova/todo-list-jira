@@ -117,163 +117,22 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"formDefault.jsx":[function(require,module,exports) {
+})({"../src/features/issues/issueSlice.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _buttonGroup = _interopRequireDefault(require("@atlaskit/button/button-group"));
-var _loadingButton = _interopRequireDefault(require("@atlaskit/button/loading-button"));
-var _standardButton = _interopRequireDefault(require("@atlaskit/button/standard-button"));
-var _checkbox = require("@atlaskit/checkbox");
-var _textfield = _interopRequireDefault(require("@atlaskit/textfield"));
-var _select = _interopRequireDefault(require("@atlaskit/select"));
-var _form = _interopRequireWildcard(require("@atlaskit/form"));
-const _excluded = ["id"];
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-const FormDefaultExample = () => /*#__PURE__*/_react.default.createElement("div", {
-  style: {
-    //display: 'flex',
-    //width: '400px',
-    //maxWidth: '100%',
-    margin: '0 auto'
-    //flexDirection: 'row',
-  }
-}, /*#__PURE__*/_react.default.createElement(_form.default, {
-  onSubmit: data => {
-    console.log('form data', data);
-    return new Promise(resolve => setTimeout(resolve, 2000)).then(() => data.username === 'error' ? {
-      username: 'IN_USE'
-    } : undefined);
-  }
-}, ({
-  formProps,
-  submitting
-}) => /*#__PURE__*/_react.default.createElement("form", formProps, /*#__PURE__*/_react.default.createElement(_form.FormHeader, {
-  title: "TodoList Tasks"
-  //description="* indicates a required field"
-}), /*#__PURE__*/_react.default.createElement(_form.FormSection, null, /*#__PURE__*/_react.default.createElement(_form.Field, {
-  "aria-required": true,
-  name: "username",
-  label: "Username",
-  defaultValue: "dst12"
-}, ({
-  fieldProps,
-  error
-}) => /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_textfield.default, _extends({
-  autoComplete: "off"
-}, fieldProps)), !error && /*#__PURE__*/_react.default.createElement(_form.HelperMessage, null, "You can use letters, numbers and periods."), error && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "This username is already in use, try another one."))), /*#__PURE__*/_react.default.createElement(_form.Field, {
-  "aria-required": true,
-  name: "selector"
-}, _ref => {
-  let {
-      fieldProps: {
-        id
-      },
-      error
-    } = _ref,
-    rest = _objectWithoutProperties(_ref.fieldProps, _excluded);
-  return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_select.default, _extends({}, rest, {
-    isDisabled: false,
-    inputId: "single-select-example",
-    className: "single-select",
-    classNamePrefix: "react-select",
-    options: [{
-      label: 'Adelaide',
-      value: 'adelaide'
-    }, {
-      label: 'Brisbane',
-      value: 'brisbane'
-    }, {
-      label: 'Canberra',
-      value: 'canberra'
-    }, {
-      label: 'Darwin',
-      value: 'darwin'
-    }, {
-      label: 'Hobart',
-      value: 'hobart'
-    }, {
-      label: 'Melbourne',
-      value: 'melbourne'
-    }, {
-      label: 'Perth',
-      value: 'perth'
-    }, {
-      label: 'Sydney',
-      value: 'sydney'
-    }],
-    placeholder: "Choose a city"
-  })));
-}), /*#__PURE__*/_react.default.createElement(_form.Field, {
-  "aria-required": true,
-  name: "password",
-  label: "Password",
-  defaultValue: ""
-  //isRequired
-  ,
-  validate: value => value && value.length < 8 ? 'TOO_SHORT' : undefined
-}, ({
-  fieldProps,
-  error,
-  valid,
-  meta
-}) => {
-  return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_textfield.default, _extends({
-    type: "password"
-  }, fieldProps)), error && !valid && /*#__PURE__*/_react.default.createElement(_form.HelperMessage, null, "Use 8 or more characters with a mix of letters, numbers and symbols."), error && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Password needs to be more than 8 characters."), valid && meta.dirty ? /*#__PURE__*/_react.default.createElement(_form.ValidMessage, null, "Awesome password!") : null);
-})), /*#__PURE__*/_react.default.createElement(_form.FormFooter, null, /*#__PURE__*/_react.default.createElement(_buttonGroup.default, null, /*#__PURE__*/_react.default.createElement(_standardButton.default, {
-  appearance: "subtle"
-}, "Cancel"), /*#__PURE__*/_react.default.createElement(_loadingButton.default, {
-  type: "submit",
-  appearance: "primary",
-  isLoading: submitting
-}, "Sign up"))))));
-var _default = FormDefaultExample;
-exports.default = _default;
-},{}],"../src/features/issues/issueSlice.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.issueSlice = exports.fetchIssues = exports.default = void 0;
+exports.issueSlice = exports.fetchIssuesByQuery = exports.deleteIssue = exports.default = exports.checkIssue = void 0;
 var _toolkit = require("@reduxjs/toolkit");
-//import axios from "axios";
-
 const initialState = {
-  loading: false,
+  loading: true,
   issues: [],
-  error: ''
+  error: '',
+  isData: true
 };
-const fetchIssues = (0, _toolkit.createAsyncThunk)('issue/fetchIssues',
-/*() => {
-return axios
-.get('/issues')
-.then(res => {
-res.issues.map(issue => {
-const fields = issue.fields;
-const creator = fields.creator;
-return {
-avatar: creator.avatarUrls,
-name: creator.displayName,
-summary: fields.summary,
-status: fields.status.name,
-updated: fields.updated,
-}
-}
-)})
-}*/
-async () => {
-  return await fetch('/issue', {
+const fetchIssuesByQuery = (0, _toolkit.createAsyncThunk)('issue/fetchIssuesByQuery', async query => {
+  return await fetch(`/search?jql=${query}`, {
     method: "GET",
     'Accept': 'application/json'
   }).then(res => {
@@ -283,42 +142,223 @@ async () => {
       const fields = issue.fields;
       const creator = fields.creator;
       return {
+        id: issue.id,
         avatar: creator.avatarUrls,
         name: creator.displayName,
         summary: fields.summary,
         status: fields.status.name,
-        updated: fields.updated
+        updated: fields.updated,
+        project: fields.project.name,
+        isChecked: false
       };
     });
-  }).then(res => {
-    //  console.log(res);
-    return res;
   }).catch(err => console.error(err));
 });
-exports.fetchIssues = fetchIssues;
+exports.fetchIssuesByQuery = fetchIssuesByQuery;
 const issueSlice = (0, _toolkit.createSlice)({
   name: 'issue',
   initialState,
+  reducers: {
+    deleteIssue: (state, action) => {
+      state.issues = state.issues.filter(i => i.id !== action.payload);
+    },
+    checkIssue: (state, action) => {
+      const index = action.payload;
+      const element = state.issues.splice(index, 1)[0];
+      element.isChecked = !element.isChecked;
+      state.issues = element.isChecked ? [...state.issues, element] : [element, ...state.issues];
+    }
+  },
   extraReducers: builder => {
-    builder.addCase(fetchIssues.pending, state => {
+    builder.addCase(fetchIssuesByQuery.pending, state => {
       state.loading = true;
     });
-    builder.addCase(fetchIssues.fulfilled, (state, action) => {
+    builder.addCase(fetchIssuesByQuery.fulfilled, (state, action) => {
       state.loading = false;
       state.issues = action.payload;
       state.error = '';
+      state.isData = Boolean(action.payload.length);
     });
-    builder.addCase(fetchIssues.rejected, (state, action) => {
+    builder.addCase(fetchIssuesByQuery.rejected, (state, action) => {
       state.loading = false;
       state.issues = [];
       state.error = action.error.message;
+      state.isData = true;
     });
   }
 });
 exports.issueSlice = issueSlice;
+const {
+  deleteIssue,
+  checkIssue
+} = issueSlice.actions;
+exports.checkIssue = checkIssue;
+exports.deleteIssue = deleteIssue;
 var _default = issueSlice.reducer;
 exports.default = _default;
-},{}],"App.jsx":[function(require,module,exports) {
+},{}],"../src/features/projects/projectSlice.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.projectSlice = exports.fetchProjects = exports.default = void 0;
+var _toolkit = require("@reduxjs/toolkit");
+const initialState = {
+  loading: true,
+  projects: [],
+  error: ''
+};
+const fetchProjects = (0, _toolkit.createAsyncThunk)('project/fetchProjects', async () => {
+  return await fetch('/projects', {
+    method: "GET",
+    'Accept': 'application/json'
+  }).then(res => {
+    return res.json();
+  }).then(res => {
+    return res.values.map(value => {
+      return {
+        label: value.name,
+        value: value.key
+      };
+    });
+  }).catch(err => console.error(err));
+});
+exports.fetchProjects = fetchProjects;
+const projectSlice = (0, _toolkit.createSlice)({
+  name: 'project',
+  initialState,
+  extraReducers: builder => {
+    builder.addCase(fetchProjects.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(fetchProjects.fulfilled, (state, action) => {
+      state.loading = false;
+      state.projects = action.payload;
+      state.error = '';
+    });
+    builder.addCase(fetchProjects.rejected, (state, action) => {
+      state.loading = false;
+      state.projects = [];
+      state.error = action.error.message;
+    });
+  }
+});
+exports.projectSlice = projectSlice;
+var _default = projectSlice.reducer;
+exports.default = _default;
+},{}],"SearchForm.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _buttonGroup = _interopRequireDefault(require("@atlaskit/button/button-group"));
+var _standardButton = _interopRequireDefault(require("@atlaskit/button/standard-button"));
+var _select = _interopRequireDefault(require("@atlaskit/select"));
+var _form = _interopRequireWildcard(require("@atlaskit/form"));
+var _reactRedux = require("react-redux");
+var _projectSlice = require("../src/features/projects/projectSlice");
+var _issueSlice = require("../src/features/issues/issueSlice");
+const _excluded = ["id"],
+  _excluded2 = ["id"];
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+const SearchForm = () => {
+  const dispatch = (0, _reactRedux.useDispatch)();
+  const project = (0, _reactRedux.useSelector)(state => state.project);
+  (0, _react.useEffect)(() => {
+    dispatch((0, _projectSlice.fetchProjects)());
+  }, []);
+  const status = [{
+    label: "Done",
+    value: "Done"
+  }, {
+    label: "In progress",
+    value: "'In Progress'"
+  }, {
+    label: "Test",
+    value: "Test"
+  }, {
+    label: "To Do",
+    value: "To Do"
+  }];
+  const handleSubmit = data => {
+    let queryString = [];
+    for (let key in data) {
+      if (data[key].length) {
+        const params = data[key].map(p => p.value).join(',');
+        queryString = [...queryString, `${key}%20in%20(${params})`];
+      }
+    }
+    queryString = queryString.length ? queryString.join('%20AND%20') : '';
+    dispatch((0, _issueSlice.fetchIssuesByQuery)(queryString));
+  };
+  return /*#__PURE__*/_react.default.createElement("div", {
+    style: {
+      display: 'flex',
+      width: '400px',
+      margin: '0 auto',
+      flexDirection: 'row'
+    }
+  }, project.loading && /*#__PURE__*/_react.default.createElement("div", null, "Loading..."), !project.loading && /*#__PURE__*/_react.default.createElement(_form.default, {
+    onSubmit: data => handleSubmit(data)
+  }, ({
+    formProps
+  }) => /*#__PURE__*/_react.default.createElement("form", formProps, /*#__PURE__*/_react.default.createElement(_form.FormHeader, {
+    title: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u044B \u043F\u043E\u0438\u0441\u043A\u0430"
+  }), /*#__PURE__*/_react.default.createElement(_form.Field, {
+    name: "project",
+    label: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043F\u0440\u043E\u0435\u043A\u0442",
+    defaultValue: []
+  }, _ref => {
+    let {
+        fieldProps: {
+          id
+        }
+      } = _ref,
+      rest = _objectWithoutProperties(_ref.fieldProps, _excluded);
+    return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_select.default, _extends({
+      inputId: id
+    }, rest, {
+      options: project.projects,
+      isMulti: true
+    })));
+  }), /*#__PURE__*/_react.default.createElement(_form.Field, {
+    name: "status",
+    label: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0442\u0430\u0442\u0443\u0441 \u0437\u0430\u0434\u0430\u0447\u0438",
+    defaultValue: []
+  }, _ref2 => {
+    let {
+        fieldProps: {
+          id
+        }
+      } = _ref2,
+      rest = _objectWithoutProperties(_ref2.fieldProps, _excluded2);
+    return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_select.default, _extends({
+      inputId: id
+    }, rest, {
+      options: status,
+      isMulti: true
+    })));
+  }), /*#__PURE__*/_react.default.createElement(_form.FormFooter, null, /*#__PURE__*/_react.default.createElement(_buttonGroup.default, null, /*#__PURE__*/_react.default.createElement(_standardButton.default, {
+    appearance: "subtle",
+    id: "create-repo-cancel"
+  }, "Cancel"), /*#__PURE__*/_react.default.createElement(_standardButton.default, {
+    appearance: "primary",
+    id: "create-repo-button",
+    type: "submit"
+  }, "Create repository"))))));
+};
+var _default = SearchForm;
+exports.default = _default;
+},{"../src/features/projects/projectSlice":"../src/features/projects/projectSlice.js","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js"}],"App.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -330,49 +370,31 @@ var _checkbox = require("@atlaskit/checkbox");
 var _standardButton = _interopRequireDefault(require("@atlaskit/button/standard-button"));
 var _trash = _interopRequireDefault(require("@atlaskit/icon/glyph/trash"));
 var _badge = _interopRequireDefault(require("@atlaskit/badge"));
-var _formDefault = _interopRequireDefault(require("./formDefault"));
 var _reactRedux = require("react-redux");
-var _react = _interopRequireWildcard(require("react"));
 var _issueSlice = require("../src/features/issues/issueSlice");
+var _react = _interopRequireWildcard(require("react"));
+var _SearchForm = _interopRequireDefault(require("./SearchForm"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function App() {
-  const [excitementLevel, setExcitementLevel] = _react.default.useState(0);
-  const [arrOfIssues, setArrOfIssues] = (0, _react.useState)([]);
-  const [arrOfProjects, setArrOfProjects] = (0, _react.useState)([]);
-  const dispatch = (0, _reactRedux.useDispatch)();
   const issue = (0, _reactRedux.useSelector)(state => state.issue);
+  const dispatch = (0, _reactRedux.useDispatch)();
+  const [highlightedRows, setHighlightedRows] = (0, _react.useState)([]);
   (0, _react.useEffect)(() => {
-    dispatch((0, _issueSlice.fetchIssues)());
-  }, []);
+    let rows = [];
+    issue.issues.forEach((i, index) => {
+      if (i.isChecked) {
+        rows = [...rows, index];
+      }
+    });
+    setHighlightedRows(rows);
+  }, [issue.issues]);
 
-  // useEffect(() => {
-  //   async function fetchData(){
-  //     const result = await fetch('/projects', {
-  //       method: "GET",
-  //       'Accept': 'application/json',
-  //     })
-  //     .then(res => {
-  //       return res.json();
-  //     })
-  //     .then(res => {
-  //       setArrOfProjects(res.values);
-  //     })
-  //     .catch(err => console.error(err))
-
-  //   }
-  //   fetchData();
-  // }, []);
-
-  const pieceOfIssue = () => {
-    return /*#__PURE__*/_react.default.createElement("div", null);
-  };
-
-  //testRows with Redux data
-  const testRows = issue.issues.map((issue, index) => {
+  //rows with Redux data
+  const rows = issue.issues.map((issue, index) => {
     return {
-      key: `issue-row-${index}`,
+      key: `issue-row-${issue.id}`,
       cells: [{
         key: 'issue-row-creator',
         content: /*#__PURE__*/_react.default.createElement("div", {
@@ -388,6 +410,9 @@ function App() {
           }
         }), /*#__PURE__*/_react.default.createElement("strong", null, issue.name))
       }, {
+        key: 'issue-row-project',
+        content: issue.project
+      }, {
         key: 'issue-row-summary',
         content: issue.summary
       }, {
@@ -398,10 +423,11 @@ function App() {
         content: /*#__PURE__*/_react.default.createElement(_checkbox.Checkbox, {
           value: "default checkbox"
           //label="Default checkbox"
-          //onChange={}
           ,
+          onChange: () => dispatch((0, _issueSlice.checkIssue)(index)),
           name: "checkbox-default",
-          testId: "cb-default"
+          testId: "cb-default",
+          isChecked: issue.isChecked
         })
       }, {
         key: 'issue-row-delete',
@@ -409,20 +435,23 @@ function App() {
           appearance: "subtle",
           iconBefore: /*#__PURE__*/_react.default.createElement(_trash.default, {
             size: "small"
-          })
-          //onClick={}
+          }),
+          onClick: () => dispatch((0, _issueSlice.deleteIssue)(issue.id))
         })
       }]
     };
   });
-
+  const caption = "TodoList Tasks";
   const head = {
     cells: [{
-      key: 'issue-summary',
-      content: 'Summary'
-    }, {
       key: 'issue-creator',
       content: 'Creator'
+    }, {
+      key: 'issue-project',
+      content: 'Project'
+    }, {
+      key: 'issue-summary',
+      content: 'Summary'
     }, {
       key: 'issue-status',
       content: 'Status'
@@ -436,45 +465,6 @@ function App() {
       width: '1'
     }]
   };
-  const testRows2 = [{
-    key: `issue-row-1`,
-    cells: [{
-      key: 'issue-row-creator',
-      content: /*#__PURE__*/_react.default.createElement("div", {
-        style: {
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
-        }
-      }, /*#__PURE__*/_react.default.createElement("strong", null, "issue.fields.creator.displayName"))
-    }, {
-      key: 'issue-row-summary',
-      content: 'issue.fields.summary'
-    }, {
-      key: 'issue-row-status',
-      content: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_badge.default, null, "issue.fields.status.name"), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("small", null, "issue.fields.updated"))
-    }, {
-      key: 'issue-row-checkbox',
-      content: /*#__PURE__*/_react.default.createElement(_checkbox.Checkbox, {
-        value: "default checkbox"
-        //label="Default checkbox"
-        //onChange={}
-        ,
-        name: "checkbox-default",
-        testId: "cb-default"
-      })
-    }, {
-      key: 'issue-row-delete',
-      content: /*#__PURE__*/_react.default.createElement(_standardButton.default, {
-        appearance: "subtle",
-        iconBefore: /*#__PURE__*/_react.default.createElement(_trash.default, {
-          size: "small"
-        })
-        //onClick={}
-      })
-    }]
-  }];
-
   return /*#__PURE__*/_react.default.createElement("div", {
     style: {
       padding: '24px',
@@ -482,16 +472,19 @@ function App() {
       //margin:'24px auto',
       boxSizing: 'border-box'
     }
-  }, /*#__PURE__*/_react.default.createElement("div", null, "\xA0"), /*#__PURE__*/_react.default.createElement("div", null, "\xA0"), /*#__PURE__*/_react.default.createElement("h1", null, "TodoList Tasks"), /*#__PURE__*/_react.default.createElement("div", null, "\xA0"), /*#__PURE__*/_react.default.createElement("div", null, "\xA0"), /*#__PURE__*/_react.default.createElement(_dynamicTable.default, {
+  }, /*#__PURE__*/_react.default.createElement(_SearchForm.default, null), !issue.loading && issue.error ? /*#__PURE__*/_react.default.createElement("div", null, "Error: ", issue.error) : null, !issue.loading && /*#__PURE__*/_react.default.createElement(_dynamicTable.default, {
+    caption: caption,
     head: head,
-    rows: testRows,
-    rowsPerPage: 5,
+    rows: rows,
+    rowsPerPage: 10,
     defaultPage: 1,
     loadingSpinnerSize: "small",
-    isLoading: issue.loading
+    isLoading: issue.loading,
+    emptyView: /*#__PURE__*/_react.default.createElement("h2", null, "The table is empty and this is the empty view"),
+    highlightedRowIndex: highlightedRows
   }));
 }
-},{"./formDefault":"formDefault.jsx","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js"}],"../src/app/store.js":[function(require,module,exports) {
+},{"../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js","./SearchForm":"SearchForm.jsx"}],"../src/app/store.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -500,15 +493,17 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _toolkit = require("@reduxjs/toolkit");
 var _issueSlice = _interopRequireDefault(require("../features/issues/issueSlice"));
+var _projectSlice = _interopRequireDefault(require("../features/projects/projectSlice"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 const store = (0, _toolkit.configureStore)({
   reducer: {
-    issue: _issueSlice.default
+    issue: _issueSlice.default,
+    project: _projectSlice.default
   }
 });
 var _default = store;
 exports.default = _default;
-},{"../features/issues/issueSlice":"../src/features/issues/issueSlice.js"}],"hello-world.jsx":[function(require,module,exports) {
+},{"../features/issues/issueSlice":"../src/features/issues/issueSlice.js","../features/projects/projectSlice":"../src/features/projects/projectSlice.js"}],"hello-world.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

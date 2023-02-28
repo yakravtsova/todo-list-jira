@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
+const { apiHost, authData } = require('../utils/constants');
 
 export default function routes(app, addon) {
-  const apiHost = 'https://yakravtsova.atlassian.net/rest/api/3';
     // Redirect root path to /atlassian-connect.json,
     // which will be served by atlassian-connect-express.
     app.get('/', (req, res) => {
@@ -9,11 +9,10 @@ export default function routes(app, addon) {
     });
 
     app.get('/issue', async (req, res) => {
-      console.log('ololo');
       const response = await fetch(`${apiHost}/search`, {
       method: "GET",
       headers: {
-        'Authorization': `Basic ${Buffer.from('margaritaselez@gmail.com:<api_token>').toString('base64')}`,
+        'Authorization': `Basic ${Buffer.from(authData).toString('base64')}`,
         'Accept': 'application/json',
       }
     })
@@ -25,10 +24,30 @@ export default function routes(app, addon) {
     return res.json(response);
     });
 
+    app.get('/search', async (req, res) => {
+      const response = await fetch(`${apiHost}${req.originalUrl}`, {
+      method: "GET",
+      headers: {
+        'Authorization': `Basic ${Buffer.from(authData).toString('base64')}`,
+        'Accept': 'application/json',
+      }
+    })
+    .then(res => {
+      return res.json();
+  })
+    .catch(err => console.error(err));
+
+    return res.json(response);
+    }
+    );
+
     app.get('/projects', async (req, res) => {
-      console.warn('projects ololo');
       const response = await fetch(`${apiHost}/project/search`, {
       method: "GET",
+      headers: {
+        'Authorization': `Basic ${Buffer.from(authData).toString('base64')}`,
+        'Accept': 'application/json',
+      }
     })
     .then(res => {
       return res.json();

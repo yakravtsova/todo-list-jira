@@ -3,51 +3,32 @@ import { Checkbox } from '@atlaskit/checkbox';
 import Button from '@atlaskit/button/standard-button';
 import TrashIcon from '@atlaskit/icon/glyph/trash';
 import Badge from '@atlaskit/badge';
-import FormDefaultExample from './formDefault';
-import { useDispatch, useSelector } from 'react-redux';
 
-import React, { useState, useEffect } from 'react';
-import { fetchIssues } from '../src/features/issues/issueSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import {deleteIssue, checkIssue} from '../src/features/issues/issueSlice';
+
+import React, { useEffect, useState } from 'react';
+import SearchForm from './SearchForm';
 
 export default function App() {
-  const [excitementLevel, setExcitementLevel] = React.useState(0);
-  const [arrOfIssues, setArrOfIssues] = useState([]);
-  const [arrOfProjects, setArrOfProjects] = useState([]);
-  const dispatch = useDispatch();
   const issue = useSelector(state => state.issue);
+  const dispatch = useDispatch();
+  const [highlightedRows, setHighlightedRows] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchIssues());
-  }, []);
+    let rows = [];
+    issue.issues.forEach((i, index) => {
+      if (i.isChecked) {
+        rows = [...rows, index]
+      }
+    });
+    setHighlightedRows(rows)
+  }, [issue.issues])
 
-  // useEffect(() => {
-  //   async function fetchData(){
-  //     const result = await fetch('/projects', {
-  //       method: "GET",
-  //       'Accept': 'application/json',
-  //     })
-  //     .then(res => {
-  //       return res.json();
-  //     })
-  //     .then(res => {
-  //       setArrOfProjects(res.values);
-  //     })
-  //     .catch(err => console.error(err))
-    
-  //   }
-  //   fetchData();
-  // }, []);
-
-    const pieceOfIssue = () => {
-      return(
-        <div></div>
-      );
-    }
-
-    //testRows with Redux data
-    const testRows = issue.issues.map((issue,index) => {
+    //rows with Redux data
+    const rows = issue.issues.map((issue, index) => {
       return {
-        key : `issue-row-${index}`,
+        key : `issue-row-${issue.id}`,
         cells : [
           {
             key: 'issue-row-creator',
@@ -57,6 +38,10 @@ export default function App() {
                 <strong>{issue.name}</strong>
               </div>
             )
+          },
+          {
+            key: 'issue-row-project',
+            content: issue.project
           },
           {
             key: 'issue-row-summary',
@@ -78,9 +63,10 @@ export default function App() {
             <Checkbox
               value="default checkbox"
               //label="Default checkbox"
-              //onChange={}
+              onChange={() => dispatch(checkIssue(index))}
               name="checkbox-default"
               testId="cb-default"
+              isChecked={issue.isChecked}
             />
             )
           },
@@ -90,7 +76,7 @@ export default function App() {
             <Button
               appearance="subtle"
               iconBefore={<TrashIcon size="small" />}
-              //onClick={}
+              onClick={() => dispatch(deleteIssue(issue.id))}
               ></Button>
               )
           }
@@ -98,15 +84,21 @@ export default function App() {
       }
     });
 
+    const caption = "TodoList Tasks";
+
     const head = {
       cells : [
         {
-          key : 'issue-summary',
-          content : 'Summary'
-        },
-        {
           key : 'issue-creator',
           content : 'Creator'
+        },
+        {
+          key : 'issue-project',
+          content : 'Project'
+        },
+        {
+          key : 'issue-summary',
+          content : 'Summary'
         },
         {
           key : 'issue-status',
@@ -124,59 +116,6 @@ export default function App() {
         }
       ]
     };
-
-    const testRows2 = [
-      {
-        key : `issue-row-1`,
-        cells : [
-          {
-            key: 'issue-row-creator',
-            content: (
-              <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-                
-                <strong>issue.fields.creator.displayName</strong>
-              </div>
-            )
-          },
-          {
-            key: 'issue-row-summary',
-            content: 'issue.fields.summary'
-          },
-          {
-            key: 'issue-row-status',
-            content: (
-            <>
-              <Badge>issue.fields.status.name</Badge>
-              <br/>
-              <small>issue.fields.updated</small>
-            </>
-            )
-          },
-          {
-            key: 'issue-row-checkbox',
-            content: (
-            <Checkbox
-              value="default checkbox"
-              //label="Default checkbox"
-              //onChange={}
-              name="checkbox-default"
-              testId="cb-default"
-            />
-            )
-          },
-          {
-            key: 'issue-row-delete',
-            content: (
-            <Button
-              appearance="subtle"
-              iconBefore={<TrashIcon size="small" />}
-              //onClick={}
-              ></Button>
-              )
-          }
-        ]
-      }
-    ]
   
 
   return (
@@ -187,25 +126,20 @@ export default function App() {
       boxSizing : 'border-box'
       }}>
 
-        <div>&nbsp;</div>
-
-        {/* <FormDefaultExample /> */}
-
-      <div>&nbsp;</div>
-      <h1>TodoList Tasks</h1>
-      <div>&nbsp;</div>
-
-      
-
-      <div>&nbsp;</div>
-
-      <DynamicTable
+      <SearchForm />
+      {!issue.loading && issue.error ? <div>Error: {issue.error}</div> : null}
+      {!issue.loading && 
+        <DynamicTable
+        caption={caption}
         head={head}
-        rows={testRows}
-        rowsPerPage={5}
+        rows={rows}
+        rowsPerPage={10}
         defaultPage={1}
         loadingSpinnerSize="small"
         isLoading={issue.loading}
-    />
+        emptyView={<h2>The table is empty and this is the empty view</h2>}
+        highlightedRowIndex={highlightedRows}
+    />}
+      
     </div>)
 }

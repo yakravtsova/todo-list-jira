@@ -1,77 +1,73 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-//import axios from "axios";
 
 const initialState = {
-    loading: false,
+    loading: true,
     issues: [],
     error: '',
+    isData: true
 };
 
-export const fetchIssues = createAsyncThunk('issue/fetchIssues', /*() => {
-    return axios
-        .get('/issues')
-        .then(res => {
-            res.issues.map(issue => {
+export const fetchIssuesByQuery = createAsyncThunk('issue/fetchIssuesByQuery', async (query) => {
+    return await fetch(`/search?jql=${query}`, {
+        method: "GET",
+        'Accept': 'application/json'
+      })
+      .then(res => {
+        return res.json();
+      })
+      .then(res => {
+        return res.issues.map(issue => {
             const fields = issue.fields;
             const creator = fields.creator;
             return {
+                id: issue.id,
                 avatar: creator.avatarUrls,
                 name: creator.displayName,
                 summary: fields.summary,
                 status: fields.status.name,
                 updated: fields.updated,
+                project: fields.project.name,
+                isChecked: false
             }
-            }
-        )})
-}*/
-    async () => {
-        return await fetch('/issue', {
-            method: "GET",
-            'Accept': 'application/json',
-          })
-          .then(res => {
-            return res.json();
-          })
-          .then(res => {
-            return res.issues.map(issue => {
-                const fields = issue.fields;
-                const creator = fields.creator;
-                return {
-                    avatar: creator.avatarUrls,
-                    name: creator.displayName,
-                    summary: fields.summary,
-                    status: fields.status.name,
-                    updated: fields.updated,
-                }
-            })
-          })
-          .then(res => {
-          //  console.log(res);
-            return res;
-          })
-          .catch(err => console.error(err))
-        
-    }
+        })
+      })
+      .catch(err => console.error(err))
+    
+}
 )
 
 export const issueSlice = createSlice({
     name: 'issue',
     initialState,
+    reducers: {
+        deleteIssue: (state, action) => {
+            state.issues = state.issues.filter(i => i.id !== action.payload);
+        },
+        checkIssue: (state, action) => {
+            const index = action.payload;
+            const element = state.issues.splice(index, 1)[0];
+            element.isChecked = !element.isChecked;
+            state.issues = element.isChecked ? [...state.issues, element] : [element, ...state.issues];
+        }
+    },
     extraReducers: (builder) => {
-        builder.addCase(fetchIssues.pending, (state) => {
+        builder.addCase(fetchIssuesByQuery.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(fetchIssues.fulfilled, (state, action) => {
+        builder.addCase(fetchIssuesByQuery.fulfilled, (state, action) => {
             state.loading = false;
             state.issues = action.payload;
             state.error = '';
+            state.isData = Boolean(action.payload.length);
         });
-        builder.addCase(fetchIssues.rejected, (state, action) => {
+        builder.addCase(fetchIssuesByQuery.rejected, (state, action) => {
             state.loading = false;
             state.issues = [];
             state.error = action.error.message;
+            state.isData = true;
         });
     }
 });
 
+export const {deleteIssue, checkIssue} = issueSlice.actions;
 export default issueSlice.reducer
