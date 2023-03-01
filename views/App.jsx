@@ -3,9 +3,11 @@ import { Checkbox } from '@atlaskit/checkbox';
 import Button from '@atlaskit/button/standard-button';
 import TrashIcon from '@atlaskit/icon/glyph/trash';
 import Badge from '@atlaskit/badge';
+import FilterIcon from '@atlaskit/icon/glyph/filter';
+import Spinner from '@atlaskit/spinner';
 
 import { useSelector, useDispatch } from 'react-redux';
-import {deleteIssue, checkIssue} from '../src/features/issues/issueSlice';
+import { deleteIssue, checkIssue, selectIssues } from '../src/features/issues/issueSlice';
 
 import React, { useEffect, useState } from 'react';
 import SearchForm from './SearchForm';
@@ -14,6 +16,18 @@ export default function App() {
   const issue = useSelector(state => state.issue);
   const dispatch = useDispatch();
   const [highlightedRows, setHighlightedRows] = useState([]);
+  const [ isFiltered, setIsFiltered ] = useState(false);
+  const issuesList = useSelector(state => selectIssues(state.issue, isFiltered));
+  const [issuesPerPage, setIssuesPerPage] = useState(null);
+  const [isFirstSearch, setIsFirstSearch] = useState(true);
+
+  const handleSetIssuesPerPage = (number) => {
+    setIssuesPerPage(number);
+  }
+
+  const handleSetIsFirstSearch = () => {
+    setIsFirstSearch(false);
+  }
 
   useEffect(() => {
     let rows = [];
@@ -23,10 +37,14 @@ export default function App() {
       }
     });
     setHighlightedRows(rows)
-  }, [issue.issues])
+  }, [issue.issues]);
+
+  const handleFilter = () => {
+    setIsFiltered(!isFiltered);
+  }
 
     //rows with Redux data
-    const rows = issue.issues.map((issue, index) => {
+    const rows = issuesList.map((issue, index) => {
       return {
         key : `issue-row-${issue.id}`,
         cells : [
@@ -116,30 +134,44 @@ export default function App() {
         }
       ]
     };
+
+    const buttonAppearance = isFiltered ? 'link' : 'subtle-link';
+    const buttonCaption = isFiltered ? 'Unfilter' : 'Filter';
   
 
   return (
     <div style={{
       padding : '24px',
-      //width:'98%',
-      //margin:'24px auto',
+      minHeight: '300px',
+      margin:'0 auto',
       boxSizing : 'border-box'
       }}>
 
-      <SearchForm />
+      <SearchForm setIssuesPerPage={handleSetIssuesPerPage} setIsFirstSearch={handleSetIsFirstSearch} />
       {!issue.loading && issue.error ? <div>Error: {issue.error}</div> : null}
-      {!issue.loading && 
-        <DynamicTable
-        caption={caption}
-        head={head}
-        rows={rows}
-        rowsPerPage={10}
-        defaultPage={1}
-        loadingSpinnerSize="small"
-        isLoading={issue.loading}
-        emptyView={<h2>The table is empty and this is the empty view</h2>}
-        highlightedRowIndex={highlightedRows}
-    />}
+      {!isFirstSearch && 
+        <>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <h2>TodoList Tasks</h2>
+          <Button 
+            onClick={handleFilter}
+            iconAfter={<FilterIcon />}
+            appearance={buttonAppearance}>
+              {buttonCaption}
+          </Button>
+        </div>
+          <DynamicTable
+            head={head}
+            rows={rows}
+            rowsPerPage={issuesPerPage}
+            defaultPage={1}
+            loadingSpinnerSize="small"
+            isLoading={issue.loading}
+            emptyView={<h2>Nothing found</h2>}
+            highlightedRowIndex={highlightedRows}
+          />
+        </>
+        }
       
     </div>)
 }

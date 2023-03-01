@@ -174,13 +174,12 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.issueSlice = exports.fetchIssuesByQuery = exports.deleteIssue = exports.default = exports.checkIssue = void 0;
+exports.selectIssues = exports.issueSlice = exports.fetchIssuesByQuery = exports.deleteIssue = exports.default = exports.checkIssue = void 0;
 var _toolkit = require("@reduxjs/toolkit");
 const initialState = {
-  loading: true,
+  loading: false,
   issues: [],
-  error: '',
-  isData: true
+  error: ''
 };
 const fetchIssuesByQuery = (0, _toolkit.createAsyncThunk)('issue/fetchIssuesByQuery', async query => {
   return await fetch(`/search?jql=${query}`, {
@@ -206,12 +205,20 @@ const fetchIssuesByQuery = (0, _toolkit.createAsyncThunk)('issue/fetchIssuesByQu
   }).catch(err => console.error(err));
 });
 exports.fetchIssuesByQuery = fetchIssuesByQuery;
+const selectIssues = (state, isFiltered) => {
+  if (isFiltered) {
+    return state.issues.filter(i => !i.isChecked);
+  }
+  return state.issues;
+};
+exports.selectIssues = selectIssues;
 const issueSlice = (0, _toolkit.createSlice)({
   name: 'issue',
   initialState,
   reducers: {
     deleteIssue: (state, action) => {
-      state.issues = state.issues.filter(i => i.id !== action.payload);
+      const issueId = action.payload;
+      state.issues = state.issues.filter(i => i.id !== issueId);
     },
     checkIssue: (state, action) => {
       const index = action.payload;
@@ -228,13 +235,11 @@ const issueSlice = (0, _toolkit.createSlice)({
       state.loading = false;
       state.issues = action.payload;
       state.error = '';
-      state.isData = Boolean(action.payload.length);
     });
     builder.addCase(fetchIssuesByQuery.rejected, (state, action) => {
       state.loading = false;
       state.issues = [];
       state.error = action.error.message;
-      state.isData = true;
     });
   }
 });
@@ -259,6 +264,8 @@ var _buttonGroup = _interopRequireDefault(require("@atlaskit/button/button-group
 var _standardButton = _interopRequireDefault(require("@atlaskit/button/standard-button"));
 var _select = _interopRequireDefault(require("@atlaskit/select"));
 var _form = _interopRequireWildcard(require("@atlaskit/form"));
+var _textfield = _interopRequireDefault(require("@atlaskit/textfield"));
+var _spinner = _interopRequireDefault(require("@atlaskit/spinner"));
 var _reactRedux = require("react-redux");
 var _projectSlice = require("../src/features/projects/projectSlice");
 var _issueSlice = require("../src/features/issues/issueSlice");
@@ -270,7 +277,10 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-const SearchForm = () => {
+const SearchForm = ({
+  setIsFirstSearch,
+  setIssuesPerPage
+}) => {
   const dispatch = (0, _reactRedux.useDispatch)();
   const project = (0, _reactRedux.useSelector)(state => state.project);
   (0, _react.useEffect)(() => {
@@ -287,12 +297,14 @@ const SearchForm = () => {
     value: "Test"
   }, {
     label: "To Do",
-    value: "To Do"
+    value: "'To Do'"
   }];
   const handleSubmit = data => {
+    setIsFirstSearch();
+    setIssuesPerPage(data.issuesPerPage);
     let queryString = [];
     for (let key in data) {
-      if (data[key].length) {
+      if (data[key].length && key !== 'issuesPerPage') {
         const params = data[key].map(p => p.value).join(',');
         queryString = [...queryString, `${key}%20in%20(${params})`];
       }
@@ -300,22 +312,39 @@ const SearchForm = () => {
     queryString = queryString.length ? queryString.join('%20AND%20') : '';
     dispatch((0, _issueSlice.fetchIssuesByQuery)(queryString));
   };
+  const validate = value => {
+    if (value < 5) {
+      return "LESS_THAN_FIVE";
+    }
+    if (value > 15) {
+      return "MORE_THAN_FIFTEEN";
+    }
+    return;
+  };
   return /*#__PURE__*/_react.default.createElement("div", {
     style: {
       display: 'flex',
       width: '400px',
-      margin: '0 auto',
-      flexDirection: 'row'
+      margin: '0 auto 30px',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '300px'
     }
-  }, project.loading && /*#__PURE__*/_react.default.createElement("div", null, "Loading..."), !project.loading && /*#__PURE__*/_react.default.createElement(_form.default, {
+  }, project.loading && /*#__PURE__*/_react.default.createElement(_spinner.default, {
+    interactionName: "load",
+    size: "large"
+  }), !project.loading && /*#__PURE__*/_react.default.createElement(_form.default, {
     onSubmit: data => handleSubmit(data)
   }, ({
-    formProps
-  }) => /*#__PURE__*/_react.default.createElement("form", formProps, /*#__PURE__*/_react.default.createElement(_form.FormHeader, {
-    title: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u044B \u043F\u043E\u0438\u0441\u043A\u0430"
+    formProps,
+    reset
+  }) => /*#__PURE__*/_react.default.createElement("form", _extends({}, formProps, {
+    noValidate: true
+  }), /*#__PURE__*/_react.default.createElement(_form.FormHeader, {
+    title: "Set the search parameters"
   }), /*#__PURE__*/_react.default.createElement(_form.Field, {
     name: "project",
-    label: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043F\u0440\u043E\u0435\u043A\u0442",
+    label: "Select a project",
     defaultValue: []
   }, _ref => {
     let {
@@ -332,7 +361,7 @@ const SearchForm = () => {
     })));
   }), /*#__PURE__*/_react.default.createElement(_form.Field, {
     name: "status",
-    label: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0442\u0430\u0442\u0443\u0441 \u0437\u0430\u0434\u0430\u0447\u0438",
+    label: "Select an issue status",
     defaultValue: []
   }, _ref2 => {
     let {
@@ -347,14 +376,27 @@ const SearchForm = () => {
       options: status,
       isMulti: true
     })));
-  }), /*#__PURE__*/_react.default.createElement(_form.FormFooter, null, /*#__PURE__*/_react.default.createElement(_buttonGroup.default, null, /*#__PURE__*/_react.default.createElement(_standardButton.default, {
+  }), /*#__PURE__*/_react.default.createElement(_form.Field, {
+    name: "issuesPerPage",
+    label: "Number of issues per page",
+    defaultValue: "5",
+    validate: validate
+  }, ({
+    fieldProps,
+    error
+  }) => /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_textfield.default, _extends({}, fieldProps, {
+    type: "number",
+    min: "5",
+    max: "15"
+  })), error === 'LESS_THAN_FIVE' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be grater than or equal to 5"), error === 'MORE_THAN_FIFTEEN' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be less than or equal to 15"))), /*#__PURE__*/_react.default.createElement(_form.FormFooter, null, /*#__PURE__*/_react.default.createElement(_buttonGroup.default, null, /*#__PURE__*/_react.default.createElement(_standardButton.default, {
     appearance: "subtle",
-    id: "create-repo-cancel"
-  }, "Cancel"), /*#__PURE__*/_react.default.createElement(_standardButton.default, {
+    id: "form-reset",
+    onClick: () => reset()
+  }, "Reset form"), /*#__PURE__*/_react.default.createElement(_standardButton.default, {
     appearance: "primary",
-    id: "create-repo-button",
+    id: "set-search-data",
     type: "submit"
-  }, "Create repository"))))));
+  }, "Find issues"))))));
 };
 var _default = SearchForm;
 exports.default = _default;

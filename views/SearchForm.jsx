@@ -3,14 +3,16 @@ import React, { Fragment, useEffect } from 'react';
 import ButtonGroup from '@atlaskit/button/button-group';
 import Button from '@atlaskit/button/standard-button';
 import Select from '@atlaskit/select';
+import Form, { Field, FormFooter, FormHeader, ErrorMessage } from '@atlaskit/form';
+import Textfield from '@atlaskit/textfield';
+import Spinner from '@atlaskit/spinner';
 
-import Form, { Field, FormFooter, FormHeader } from '@atlaskit/form';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProjects } from '../src/features/projects/projectSlice';
 import { fetchIssuesByQuery } from '../src/features/issues/issueSlice';
 
 
-const SearchForm = () => {
+const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
 
     const dispatch = useDispatch();
     const project = useSelector(state => state.project);
@@ -23,13 +25,15 @@ const SearchForm = () => {
       {label: "Done", value: "Done"},
       {label: "In progress", value: "'In Progress'"},
       {label: "Test", value: "Test"},
-      {label: "To Do", value: "To Do"}
+      {label: "To Do", value: "'To Do'"}
     ];
 
     const handleSubmit = (data) => {
+      setIsFirstSearch();
+      setIssuesPerPage(data.issuesPerPage);
       let queryString = [];
       for (let key in data) {
-        if (data[key].length) {
+        if (data[key].length && key !== 'issuesPerPage') {
           const params = data[key].map(p => p.value).join(',');
           queryString = [...queryString, `${key}%20in%20(${params})`];
         }
@@ -38,28 +42,40 @@ const SearchForm = () => {
       dispatch(fetchIssuesByQuery(queryString));
     };
 
+    const validate = (value) => {
+      if (value < 5) {
+        return "LESS_THAN_FIVE"
+      }
+      if (value > 15) {
+        return "MORE_THAN_FIFTEEN"
+      }
+      return;
+    }
+
   return (
       <div
       style={{
         display: 'flex',
         width: '400px',
-        margin: '0 auto',
-        flexDirection: 'row',
+        margin: '0 auto 30px',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '300px'
       }}
     >
-      {project.loading && <div>Loading...</div>}
+      {project.loading && <Spinner interactionName="load" size="large" />}
       {!project.loading && <Form onSubmit={(data) => handleSubmit(data)}>
-        {({ formProps }) => (
+        {({ formProps, reset }) => (
           <form
-            {...formProps}
+            {...formProps} noValidate
           >
             <FormHeader
-              title="Выберите параметры поиска"
+              title="Set the search parameters"
             />
 
             <Field
               name="project"
-              label="Выберите проект"
+              label="Select a project"
               defaultValue={[]}
             >
               {({ fieldProps: { id, ...rest } }) => (
@@ -70,7 +86,7 @@ const SearchForm = () => {
             </Field>
             <Field
               name="status"
-              label="Выберите статус задачи"
+              label="Select an issue status"
               defaultValue={[]}
             >
               {({ fieldProps: { id, ...rest } }) => (
@@ -78,18 +94,35 @@ const SearchForm = () => {
                   <Select inputId={id} {...rest} options={status} isMulti />
                 </Fragment>
               )}
-            </Field> 
+            </Field>
+            <Field name="issuesPerPage" label="Number of issues per page"  defaultValue="5" validate={validate} >
+              {({ fieldProps, error }) => (
+                <Fragment>
+                  <Textfield {...fieldProps} type="number" min="5" max="15" />
+                  {error === 'LESS_THAN_FIVE' && (
+                    <ErrorMessage>
+                      Value must be grater than or equal to 5
+                    </ErrorMessage>
+                  )}
+                  {error === 'MORE_THAN_FIFTEEN' && (
+                    <ErrorMessage>
+                      Value must be less than or equal to 15
+                    </ErrorMessage>
+                  )}
+                  </Fragment>
+                )}
+              </Field>
             <FormFooter>
               <ButtonGroup>
-                <Button appearance="subtle" id="create-repo-cancel">
-                  Cancel
+                <Button appearance="subtle" id="form-reset" onClick={() => reset()}>
+                  Reset form
                 </Button>
                 <Button
                   appearance="primary"
-                  id="create-repo-button"
+                  id="set-search-data"
                   type="submit"
                 >
-                  Create repository
+                  Find issues
                 </Button>
               </ButtonGroup>
             </FormFooter>

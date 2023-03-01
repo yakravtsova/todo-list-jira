@@ -23866,7 +23866,28 @@ Object.defineProperty(exports, "default", {
 });
 var _badge = _interopRequireDefault(require("./badge"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./badge":"../node_modules/@atlaskit/badge/dist/esm/badge.js"}],"../node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js":[function(require,module,exports) {
+},{"./badge":"../node_modules/@atlaskit/badge/dist/esm/badge.js"}],"../node_modules/@atlaskit/icon/glyph/filter.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _base = require("@atlaskit/icon/base");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const FilterIcon = props => /*#__PURE__*/_react.default.createElement(_base.Icon, Object.assign({
+  dangerouslySetGlyph: `<svg width="24" height="24" viewBox="0 0 24 24" role="presentation"><path d="M7 13h10l1-2H6zM3.993 6c-.548 0-.79.405-.546.895L4 8h16l.553-1.105C20.8 6.4 20.555 6 20.007 6H3.993zm6.785 11.556a.87.87 0 00.727.444h.99c.279 0 .605-.2.727-.444L14 16h-4l.778 1.556z" fill="currentColor" fill-rule="evenodd"/></svg>`
+}, props));
+
+FilterIcon.displayName = 'FilterIcon';
+var _default = FilterIcon;
+exports.default = _default;
+},{"react":"../../../../../react => React.external","@atlaskit/icon/base":"../node_modules/@atlaskit/icon/dist/esm/entry-points/base.js"}],"../node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js":[function(require,module,exports) {
 /**
  * @license React
  * use-sync-external-store-shim.development.js
@@ -29416,7 +29437,7 @@ exports.autoBatchEnhancer = autoBatchEnhancer;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.issueSlice = exports.fetchIssuesByQuery = exports.deleteIssue = exports.default = exports.checkIssue = void 0;
+exports.selectIssues = exports.issueSlice = exports.fetchIssuesByQuery = exports.deleteIssue = exports.default = exports.checkIssue = void 0;
 var _toolkit = require("@reduxjs/toolkit");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -29429,10 +29450,9 @@ function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyri
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 var initialState = {
-  loading: true,
+  loading: false,
   issues: [],
-  error: '',
-  isData: true
+  error: ''
 };
 var fetchIssuesByQuery = (0, _toolkit.createAsyncThunk)('issue/fetchIssuesByQuery', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(query) {
@@ -29476,13 +29496,23 @@ var fetchIssuesByQuery = (0, _toolkit.createAsyncThunk)('issue/fetchIssuesByQuer
   };
 }());
 exports.fetchIssuesByQuery = fetchIssuesByQuery;
+var selectIssues = function selectIssues(state, isFiltered) {
+  if (isFiltered) {
+    return state.issues.filter(function (i) {
+      return !i.isChecked;
+    });
+  }
+  return state.issues;
+};
+exports.selectIssues = selectIssues;
 var issueSlice = (0, _toolkit.createSlice)({
   name: 'issue',
   initialState: initialState,
   reducers: {
     deleteIssue: function deleteIssue(state, action) {
+      var issueId = action.payload;
       state.issues = state.issues.filter(function (i) {
-        return i.id !== action.payload;
+        return i.id !== issueId;
       });
     },
     checkIssue: function checkIssue(state, action) {
@@ -29500,13 +29530,11 @@ var issueSlice = (0, _toolkit.createSlice)({
       state.loading = false;
       state.issues = action.payload;
       state.error = '';
-      state.isData = Boolean(action.payload.length);
     });
     builder.addCase(fetchIssuesByQuery.rejected, function (state, action) {
       state.loading = false;
       state.issues = [];
       state.error = action.error.message;
-      state.isData = true;
     });
   }
 });
@@ -50812,7 +50840,500 @@ var _label = _interopRequireDefault(require("./label"));
 var _messages = require("./messages");
 var _fieldset = _interopRequireDefault(require("./fieldset"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./form":"../node_modules/@atlaskit/form/dist/esm/form.js","./form-header":"../node_modules/@atlaskit/form/dist/esm/form-header.js","./form-footer":"../node_modules/@atlaskit/form/dist/esm/form-footer.js","./form-section":"../node_modules/@atlaskit/form/dist/esm/form-section.js","./field":"../node_modules/@atlaskit/form/dist/esm/field.js","./checkbox-field":"../node_modules/@atlaskit/form/dist/esm/checkbox-field.js","./range-field":"../node_modules/@atlaskit/form/dist/esm/range-field.js","./label":"../node_modules/@atlaskit/form/dist/esm/label.js","./messages":"../node_modules/@atlaskit/form/dist/esm/messages.js","./fieldset":"../node_modules/@atlaskit/form/dist/esm/fieldset.js"}],"../src/features/projects/projectSlice.js":[function(require,module,exports) {
+},{"./form":"../node_modules/@atlaskit/form/dist/esm/form.js","./form-header":"../node_modules/@atlaskit/form/dist/esm/form-header.js","./form-footer":"../node_modules/@atlaskit/form/dist/esm/form-footer.js","./form-section":"../node_modules/@atlaskit/form/dist/esm/form-section.js","./field":"../node_modules/@atlaskit/form/dist/esm/field.js","./checkbox-field":"../node_modules/@atlaskit/form/dist/esm/checkbox-field.js","./range-field":"../node_modules/@atlaskit/form/dist/esm/range-field.js","./label":"../node_modules/@atlaskit/form/dist/esm/label.js","./messages":"../node_modules/@atlaskit/form/dist/esm/messages.js","./fieldset":"../node_modules/@atlaskit/form/dist/esm/fieldset.js"}],"../node_modules/@atlaskit/textfield/dist/esm/component-tokens.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.transparent = exports.textColor = exports.subtleBorderColorHover = exports.placeholderTextColor = exports.disabledTextColor = exports.disabledBackgroundColor = exports.defaultBorderColorFocus = exports.defaultBorderColor = exports.defaultBackgroundColorHover = exports.defaultBackgroundColorFocus = exports.defaultBackgroundColor = void 0;
+var _colors = require("@atlaskit/theme/colors");
+var disabledBackgroundColor = {
+  light: "var(--ds-background-disabled, ".concat(_colors.N10, ")"),
+  dark: "var(--ds-background-disabled, ".concat(_colors.DN10, ")")
+};
+exports.disabledBackgroundColor = disabledBackgroundColor;
+var defaultBackgroundColor = {
+  light: "var(--ds-background-input, ".concat(_colors.N10, ")"),
+  dark: "var(--ds-background-input, ".concat(_colors.DN10, ")")
+};
+exports.defaultBackgroundColor = defaultBackgroundColor;
+var defaultBackgroundColorFocus = {
+  light: "var(--ds-background-input-pressed, ".concat(_colors.N0, ")"),
+  dark: "var(--ds-background-input-pressed, ".concat(_colors.DN10, ")")
+};
+exports.defaultBackgroundColorFocus = defaultBackgroundColorFocus;
+var defaultBackgroundColorHover = {
+  light: "var(--ds-background-input-hovered, ".concat(_colors.N30, ")"),
+  dark: "var(--ds-background-input-hovered, ".concat(_colors.DN30, ")")
+};
+exports.defaultBackgroundColorHover = defaultBackgroundColorHover;
+var defaultBorderColor = {
+  light: "var(--ds-border-input, ".concat(_colors.N40, ")"),
+  dark: "var(--ds-border-input, ".concat(_colors.DN40, ")")
+};
+exports.defaultBorderColor = defaultBorderColor;
+var defaultBorderColorFocus = {
+  light: "var(--ds-border-focused, ".concat(_colors.B100, ")"),
+  dark: "var(--ds-border-focused, ".concat(_colors.B75, ")")
+};
+exports.defaultBorderColorFocus = defaultBorderColorFocus;
+var subtleBorderColorHover = {
+  light: "var(--ds-border-input, transparent)",
+  dark: "var(--ds-border-input, transparent)"
+};
+exports.subtleBorderColorHover = subtleBorderColorHover;
+var transparent = {
+  light: 'transparent',
+  dark: 'transparent'
+};
+exports.transparent = transparent;
+var textColor = {
+  light: "var(--ds-text, ".concat(_colors.N900, ")"),
+  dark: "var(--ds-text, ".concat(_colors.DN600, ")")
+};
+exports.textColor = textColor;
+var disabledTextColor = {
+  light: "var(--ds-text-disabled, ".concat(_colors.N70, ")"),
+  dark: "var(--ds-text-disabled, ".concat(_colors.DN90, ")")
+};
+exports.disabledTextColor = disabledTextColor;
+var placeholderTextColor = {
+  light: "var(--ds-text-subtlest, ".concat(_colors.N100, ")"),
+  dark: "var(--ds-text-subtlest, ".concat(_colors.DN90, ")")
+};
+exports.placeholderTextColor = placeholderTextColor;
+},{"@atlaskit/theme/colors":"../node_modules/@atlaskit/theme/dist/esm/colors.js"}],"../node_modules/@atlaskit/textfield/dist/esm/styles.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.textFieldColors = exports.inputStyles = exports.containerStyles = void 0;
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _colors = require("@atlaskit/theme/colors");
+var _constants = require("@atlaskit/theme/constants");
+var componentTokens = _interopRequireWildcard(require("./component-tokens"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = null != arguments[i] ? arguments[i] : {};
+    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+      (0, _defineProperty2.default)(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+var fontSize = (0, _constants.fontSize)();
+var gridSize = (0, _constants.gridSize)();
+var disabledRules = {
+  light: {
+    backgroundColor: componentTokens.disabledBackgroundColor.light,
+    backgroundColorHover: componentTokens.disabledBackgroundColor.light,
+    borderColor: componentTokens.disabledBackgroundColor.light,
+    textColor: componentTokens.disabledTextColor.light
+  },
+  dark: {
+    backgroundColor: componentTokens.disabledBackgroundColor.dark,
+    backgroundColorHover: componentTokens.disabledBackgroundColor.dark,
+    borderColor: componentTokens.disabledBackgroundColor.dark,
+    textColor: componentTokens.disabledTextColor.dark
+  }
+};
+var invalidRules = {
+  light: {
+    // ----
+    backgroundColor: componentTokens.defaultBackgroundColor.light,
+    backgroundColorHover: componentTokens.defaultBackgroundColorHover.light,
+    // ^--- the above values aren't used directly they remain because its exposed by the `textFieldColors` export
+    backgroundColorFocus: componentTokens.defaultBackgroundColorFocus.light,
+    borderColor: "var(--ds-border-danger, ".concat(_colors.R400, ")"),
+    borderColorFocus: componentTokens.defaultBorderColorFocus.light
+  },
+  dark: {
+    // ----
+    backgroundColor: componentTokens.defaultBackgroundColor.dark,
+    backgroundColorHover: componentTokens.defaultBackgroundColorHover.dark,
+    // ^--- the above values aren't used directly they remain because its exposed by the `textFieldColors` export
+    backgroundColorFocus: componentTokens.defaultBackgroundColorFocus.dark,
+    borderColor: "var(--ds-border-danger, ".concat(_colors.R400, ")"),
+    borderColorFocus: componentTokens.defaultBorderColorFocus.dark
+  }
+};
+var backgroundColor = {
+  standard: componentTokens.defaultBackgroundColor,
+  subtle: componentTokens.transparent,
+  none: componentTokens.transparent
+};
+var backgroundColorFocus = {
+  standard: componentTokens.defaultBackgroundColorFocus,
+  subtle: componentTokens.defaultBackgroundColorFocus,
+  none: componentTokens.transparent
+};
+var backgroundColorHover = {
+  standard: componentTokens.defaultBackgroundColorHover,
+  subtle: componentTokens.defaultBackgroundColorHover,
+  none: componentTokens.transparent
+};
+var borderColor = {
+  standard: componentTokens.defaultBorderColor,
+  subtle: componentTokens.transparent,
+  none: componentTokens.transparent
+};
+var borderColorFocus = {
+  standard: componentTokens.defaultBorderColorFocus,
+  subtle: componentTokens.defaultBorderColorFocus,
+  none: componentTokens.transparent
+};
+var borderColorHover = {
+  standard: componentTokens.defaultBorderColor,
+  subtle: componentTokens.subtleBorderColorHover,
+  none: componentTokens.transparent
+};
+var getContainerTextBgAndBorderColor = function getContainerTextBgAndBorderColor(appearance, mode) {
+  return {
+    backgroundColor: backgroundColor[appearance][mode],
+    borderColor: borderColor[appearance][mode],
+    color: componentTokens.textColor[mode],
+    cursor: 'text',
+    '&:hover:not([data-disabled])': {
+      backgroundColor: backgroundColorHover[appearance][mode],
+      borderColor: borderColorHover[appearance][mode]
+    },
+    '&:focus-within:not([data-disabled])': {
+      backgroundColor: backgroundColorFocus[appearance][mode],
+      borderColor: borderColorFocus[appearance][mode]
+    },
+    '&[data-disabled]': _objectSpread({
+      color: disabledRules[mode].textColor,
+      cursor: 'not-allowed'
+    }, appearance === 'standard' && {
+      backgroundColor: disabledRules[mode].backgroundColor,
+      borderColor: disabledRules[mode].borderColor
+    }),
+    '&[data-invalid], &[data-invalid]:hover': {
+      borderColor: invalidRules[mode].borderColor
+    },
+    '&[data-invalid]:focus-within': {
+      backgroundColor: invalidRules[mode].backgroundColorFocus,
+      borderColor: invalidRules[mode].borderColorFocus
+    },
+    '@media screen and (-ms-high-contrast: active)': {
+      '&[data-invalid]:focus-within': {
+        borderColor: 'Highlight'
+      },
+      '&:focus-within': {
+        borderColor: 'Highlight'
+      },
+      '&[data-disabled]': {
+        borderColor: 'GrayText'
+      }
+    }
+  };
+};
+var widthMap = {
+  xsmall: 80,
+  small: 160,
+  medium: 240,
+  large: 320,
+  xlarge: 480
+};
+var getMaxWidth = function getMaxWidth(width) {
+  return !width ? "100%" : width in widthMap ? widthMap[width] : +width;
+};
+var containerStyles = function containerStyles(appearance, mode, width) {
+  return _objectSpread(_objectSpread({
+    alignItems: 'center'
+  }, getContainerTextBgAndBorderColor(appearance, mode)), {}, {
+    borderRadius: 3,
+    borderWidth: 2,
+    borderStyle: appearance === 'none' ? 'none' : 'solid',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flex: '1 1 100%',
+    fontSize: fontSize,
+    justifyContent: 'space-between',
+    maxWidth: getMaxWidth(width),
+    overflow: 'hidden',
+    transition: "background-color 0.2s ease-in-out, border-color 0.2s ease-in-out",
+    wordWrap: 'break-word',
+    verticalAlign: 'top',
+    pointerEvents: 'auto'
+  });
+};
+exports.containerStyles = containerStyles;
+var inputStyles = function inputStyles(mode) {
+  return {
+    backgroundColor: 'transparent',
+    border: 0,
+    boxSizing: 'border-box',
+    color: 'inherit',
+    cursor: 'inherit',
+    fontSize: fontSize,
+    minWidth: '0',
+    outline: 'none',
+    width: '100%',
+    lineHeight: gridSize * 2.5 / fontSize,
+    fontFamily: (0, _constants.fontFamily)(),
+    '&[data-monospaced]': {
+      fontFamily: (0, _constants.codeFontFamily)()
+    },
+    '&[data-compact]': {
+      padding: "".concat(gridSize / 2, "px ").concat(gridSize - 2, "px"),
+      height: "".concat((gridSize * 3.5 / fontSize).toFixed(2), "em")
+    },
+    '&:not([data-compact])': {
+      padding: "".concat(gridSize, "px ").concat(gridSize - 2, "px"),
+      height: "".concat((gridSize * 4.5 / fontSize).toFixed(2), "em")
+    },
+    '&[disabled]': {
+      // Safari (WebKit) adds a -webkit-text-fill-color style to disabled inputs
+      // which takes priority over color and makes the text unreadable. Need to
+      // override it with the color we want.
+      WebkitTextFillColor: disabledRules[mode].textColor
+    },
+    // Hide the clear indicator on Edge (Windows only)
+    '&::-ms-clear': {
+      display: 'none'
+    },
+    '&:invalid': {
+      boxShadow: 'none'
+    },
+    '&::placeholder': {
+      color: componentTokens.placeholderTextColor[mode],
+      '&:disabled': {
+        color: disabledRules[mode].textColor
+      }
+    },
+    '@media screen and (-ms-high-contrast: active)': {
+      '&[disabled]': {
+        color: 'GrayText'
+      }
+    }
+  };
+};
+
+// TODO: Remove when removing legacy theming.
+exports.inputStyles = inputStyles;
+var textFieldColors = {
+  backgroundColor: backgroundColor,
+  backgroundColorFocus: backgroundColorFocus,
+  backgroundColorHover: backgroundColorHover,
+  borderColor: borderColor,
+  borderColorFocus: borderColorFocus,
+  borderColorHover: borderColorHover,
+  placeholderTextColor: componentTokens.placeholderTextColor,
+  textColor: componentTokens.textColor,
+  invalidRules: invalidRules,
+  disabledRules: disabledRules
+};
+exports.textFieldColors = textFieldColors;
+},{"@babel/runtime/helpers/defineProperty":"../node_modules/@babel/runtime/helpers/defineProperty.js","@atlaskit/theme/colors":"../node_modules/@atlaskit/theme/dist/esm/colors.js","@atlaskit/theme/constants":"../node_modules/@atlaskit/theme/dist/esm/constants.js","./component-tokens":"../node_modules/@atlaskit/textfield/dist/esm/component-tokens.js"}],"../node_modules/@atlaskit/textfield/dist/esm/text-field.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
+var _react = _interopRequireWildcard(require("react"));
+var _react2 = require("@emotion/react");
+var _analyticsNext = require("@atlaskit/analytics-next");
+var _components = require("@atlaskit/theme/components");
+var _styles = require("./styles");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _excluded = ["appearance", "isCompact", "isDisabled", "isInvalid", "isRequired", "isReadOnly", "isMonospaced", "width", "elemAfterInput", "elemBeforeInput", "testId", "onFocus", "onBlur", "onMouseDown", "className"];
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = null != arguments[i] ? arguments[i] : {};
+    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+      (0, _defineProperty2.default)(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+/** @jsx jsx */
+
+var analyticsParams = {
+  componentName: 'textField',
+  packageName: "@atlaskit/textfield",
+  packageVersion: "5.3.6"
+};
+var Textfield = /*#__PURE__*/(0, _react.forwardRef)(function (props, ref) {
+  var _props$appearance = props.appearance,
+    appearance = _props$appearance === void 0 ? 'standard' : _props$appearance,
+    _props$isCompact = props.isCompact,
+    isCompact = _props$isCompact === void 0 ? false : _props$isCompact,
+    _props$isDisabled = props.isDisabled,
+    isDisabled = _props$isDisabled === void 0 ? false : _props$isDisabled,
+    _props$isInvalid = props.isInvalid,
+    isInvalid = _props$isInvalid === void 0 ? false : _props$isInvalid,
+    _props$isRequired = props.isRequired,
+    isRequired = _props$isRequired === void 0 ? false : _props$isRequired,
+    _props$isReadOnly = props.isReadOnly,
+    isReadOnly = _props$isReadOnly === void 0 ? false : _props$isReadOnly,
+    _props$isMonospaced = props.isMonospaced,
+    isMonospaced = _props$isMonospaced === void 0 ? false : _props$isMonospaced,
+    width = props.width,
+    elemAfterInput = props.elemAfterInput,
+    elemBeforeInput = props.elemBeforeInput,
+    testId = props.testId,
+    onFocus = props.onFocus,
+    onBlur = props.onBlur,
+    onMouseDown = props.onMouseDown,
+    className = props.className,
+    spreadProps = (0, _objectWithoutProperties2.default)(props, _excluded);
+  var inputRef = (0, _react.useRef)(null);
+  var _useGlobalTheme = (0, _components.useGlobalTheme)(),
+    mode = _useGlobalTheme.mode;
+  var handleOnFocus = (0, _analyticsNext.usePlatformLeafEventHandler)(_objectSpread({
+    fn: function fn(event) {
+      onFocus && onFocus(event);
+    },
+    action: 'focused'
+  }, analyticsParams));
+  var handleOnBlur = (0, _analyticsNext.usePlatformLeafEventHandler)(_objectSpread({
+    fn: function fn(event) {
+      onBlur && onBlur(event);
+    },
+    action: 'blurred'
+  }, analyticsParams));
+  var handleOnMouseDown = (0, _react.useCallback)(function (event) {
+    // Running e.preventDefault() on the INPUT prevents double click behaviour
+    // Sadly we needed this cast as the target type is being correctly set
+    var target = event.target;
+    if (target.tagName !== 'INPUT') {
+      event.preventDefault();
+    }
+    if (inputRef && inputRef.current && !isDisabled && document.activeElement !== inputRef.current) {
+      inputRef.current.focus();
+    }
+    onMouseDown && onMouseDown(event);
+  }, [onMouseDown, isDisabled]);
+  var setInputRef = (0, _react.useCallback)(function (inputElement) {
+    inputRef.current = inputElement;
+    if (!ref) {
+      return;
+    }
+    if ((0, _typeof2.default)(ref) === 'object') {
+      // This is a blunder on the part of @types/react
+      // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065
+      // .current should be assignable
+      // @ts-expect-error
+      ref.current = inputElement;
+    }
+    if (typeof ref === 'function') {
+      ref(inputElement);
+    }
+  }, [ref]);
+  var containerStyles = (0, _react.useMemo)(function () {
+    return (0, _styles.containerStyles)(appearance, mode, width);
+  }, [appearance, mode, width]);
+  var inputStyle = (0, _react.useMemo)(function () {
+    return (0, _styles.inputStyles)(mode);
+  }, [mode]);
+  return (
+    // We use event bubbling here to listen to any child element mouse down event.
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    (0, _react2.jsx)("div", {
+      "data-disabled": isDisabled ? isDisabled : undefined,
+      "data-invalid": isInvalid ? isInvalid : undefined,
+      "data-ds--text-field--container": true,
+      "data-testid": testId && "".concat(testId, "-container"),
+      onMouseDown: handleOnMouseDown
+      // TODO: When removing legacy theming fix this.
+      // eslint-disable-next-line @repo/internal/react/consistent-css-prop-usage
+      ,
+
+      css: containerStyles,
+      className: className
+    }, elemBeforeInput, (0, _react2.jsx)("input", (0, _extends2.default)({}, spreadProps, {
+      "data-compact": isCompact ? isCompact : undefined,
+      "data-monospaced": isMonospaced ? isMonospaced : undefined,
+      "data-ds--text-field--input": true,
+      "data-testid": testId,
+      "aria-invalid": isInvalid ? isInvalid : undefined,
+      disabled: isDisabled,
+      readOnly: isReadOnly,
+      required: isRequired,
+      onBlur: handleOnBlur,
+      onFocus: handleOnFocus,
+      ref: setInputRef
+      // TODO: When removing legacy theming fix this.
+      // eslint-disable-next-line @repo/internal/react/consistent-css-prop-usage
+      ,
+
+      css: inputStyle
+    })), elemAfterInput)
+  );
+});
+Textfield.displayName = 'Textfield';
+
+/**
+ * __Textfield__
+ *
+ * A text field is an input that allows a user to write or edit text.
+ *
+ * - [Examples](https://atlassian.design/components/textfield/examples)
+ * - [Code](https://atlassian.design/components/textfield/code)
+ * - [Usage](https://atlassian.design/components/textfield/usage)
+ */
+var _default = /*#__PURE__*/(0, _react.memo)(Textfield); // The above generic is used to let ERTC know what props to extract.
+// See: https://github.com/atlassian/extract-react-types/issues/201
+exports.default = _default;
+},{"@babel/runtime/helpers/extends":"../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/typeof":"../node_modules/@babel/runtime/helpers/typeof.js","@babel/runtime/helpers/defineProperty":"../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","react":"../../../../../react => React.external","@emotion/react":"../node_modules/@emotion/react/dist/emotion-react.browser.esm.js","@atlaskit/analytics-next":"../node_modules/@atlaskit/analytics-next/dist/esm/index.js","@atlaskit/theme/components":"../node_modules/@atlaskit/theme/dist/esm/components.js","./styles":"../node_modules/@atlaskit/textfield/dist/esm/styles.js"}],"../node_modules/@atlaskit/textfield/dist/esm/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "TextFieldColors", {
+  enumerable: true,
+  get: function () {
+    return _styles.textFieldColors;
+  }
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _textField.default;
+  }
+});
+var _textField = _interopRequireDefault(require("./text-field"));
+var _styles = require("./styles");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./text-field":"../node_modules/@atlaskit/textfield/dist/esm/text-field.js","./styles":"../node_modules/@atlaskit/textfield/dist/esm/styles.js"}],"../src/features/projects/projectSlice.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -50892,6 +51413,8 @@ var _buttonGroup = _interopRequireDefault(require("@atlaskit/button/button-group
 var _standardButton = _interopRequireDefault(require("@atlaskit/button/standard-button"));
 var _select = _interopRequireDefault(require("@atlaskit/select"));
 var _form = _interopRequireWildcard(require("@atlaskit/form"));
+var _textfield = _interopRequireDefault(require("@atlaskit/textfield"));
+var _spinner = _interopRequireDefault(require("@atlaskit/spinner"));
 var _reactRedux = require("react-redux");
 var _projectSlice = require("../src/features/projects/projectSlice");
 var _issueSlice = require("../src/features/issues/issueSlice");
@@ -50909,7 +51432,9 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-var SearchForm = function SearchForm() {
+var SearchForm = function SearchForm(_ref) {
+  var setIsFirstSearch = _ref.setIsFirstSearch,
+    setIssuesPerPage = _ref.setIssuesPerPage;
   var dispatch = (0, _reactRedux.useDispatch)();
   var project = (0, _reactRedux.useSelector)(function (state) {
     return state.project;
@@ -50928,12 +51453,14 @@ var SearchForm = function SearchForm() {
     value: "Test"
   }, {
     label: "To Do",
-    value: "To Do"
+    value: "'To Do'"
   }];
   var handleSubmit = function handleSubmit(data) {
+    setIsFirstSearch();
+    setIssuesPerPage(data.issuesPerPage);
     var queryString = [];
     for (var key in data) {
-      if (data[key].length) {
+      if (data[key].length && key !== 'issuesPerPage') {
         var params = data[key].map(function (p) {
           return p.value;
         }).join(',');
@@ -50943,29 +51470,46 @@ var SearchForm = function SearchForm() {
     queryString = queryString.length ? queryString.join('%20AND%20') : '';
     dispatch((0, _issueSlice.fetchIssuesByQuery)(queryString));
   };
+  var validate = function validate(value) {
+    if (value < 5) {
+      return "LESS_THAN_FIVE";
+    }
+    if (value > 15) {
+      return "MORE_THAN_FIFTEEN";
+    }
+    return;
+  };
   return /*#__PURE__*/_react.default.createElement("div", {
     style: {
       display: 'flex',
       width: '400px',
-      margin: '0 auto',
-      flexDirection: 'row'
+      margin: '0 auto 30px',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '300px'
     }
-  }, project.loading && /*#__PURE__*/_react.default.createElement("div", null, "Loading..."), !project.loading && /*#__PURE__*/_react.default.createElement(_form.default, {
+  }, project.loading && /*#__PURE__*/_react.default.createElement(_spinner.default, {
+    interactionName: "load",
+    size: "large"
+  }), !project.loading && /*#__PURE__*/_react.default.createElement(_form.default, {
     onSubmit: function onSubmit(data) {
       return handleSubmit(data);
     }
-  }, function (_ref) {
-    var formProps = _ref.formProps;
-    return /*#__PURE__*/_react.default.createElement("form", formProps, /*#__PURE__*/_react.default.createElement(_form.FormHeader, {
-      title: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u044B \u043F\u043E\u0438\u0441\u043A\u0430"
+  }, function (_ref2) {
+    var formProps = _ref2.formProps,
+      reset = _ref2.reset;
+    return /*#__PURE__*/_react.default.createElement("form", _extends({}, formProps, {
+      noValidate: true
+    }), /*#__PURE__*/_react.default.createElement(_form.FormHeader, {
+      title: "Set the search parameters"
     }), /*#__PURE__*/_react.default.createElement(_form.Field, {
       name: "project",
-      label: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043F\u0440\u043E\u0435\u043A\u0442",
+      label: "Select a project",
       defaultValue: []
-    }, function (_ref2) {
-      var _ref2$fieldProps = _ref2.fieldProps,
-        id = _ref2$fieldProps.id,
-        rest = _objectWithoutProperties(_ref2$fieldProps, _excluded);
+    }, function (_ref3) {
+      var _ref3$fieldProps = _ref3.fieldProps,
+        id = _ref3$fieldProps.id,
+        rest = _objectWithoutProperties(_ref3$fieldProps, _excluded);
       return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_select.default, _extends({
         inputId: id
       }, rest, {
@@ -50974,31 +51518,47 @@ var SearchForm = function SearchForm() {
       })));
     }), /*#__PURE__*/_react.default.createElement(_form.Field, {
       name: "status",
-      label: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u0442\u0430\u0442\u0443\u0441 \u0437\u0430\u0434\u0430\u0447\u0438",
+      label: "Select an issue status",
       defaultValue: []
-    }, function (_ref3) {
-      var _ref3$fieldProps = _ref3.fieldProps,
-        id = _ref3$fieldProps.id,
-        rest = _objectWithoutProperties(_ref3$fieldProps, _excluded2);
+    }, function (_ref4) {
+      var _ref4$fieldProps = _ref4.fieldProps,
+        id = _ref4$fieldProps.id,
+        rest = _objectWithoutProperties(_ref4$fieldProps, _excluded2);
       return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_select.default, _extends({
         inputId: id
       }, rest, {
         options: status,
         isMulti: true
       })));
+    }), /*#__PURE__*/_react.default.createElement(_form.Field, {
+      name: "issuesPerPage",
+      label: "Number of issues per page",
+      defaultValue: "5",
+      validate: validate
+    }, function (_ref5) {
+      var fieldProps = _ref5.fieldProps,
+        error = _ref5.error;
+      return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_textfield.default, _extends({}, fieldProps, {
+        type: "number",
+        min: "5",
+        max: "15"
+      })), error === 'LESS_THAN_FIVE' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be grater than or equal to 5"), error === 'MORE_THAN_FIFTEEN' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be less than or equal to 15"));
     }), /*#__PURE__*/_react.default.createElement(_form.FormFooter, null, /*#__PURE__*/_react.default.createElement(_buttonGroup.default, null, /*#__PURE__*/_react.default.createElement(_standardButton.default, {
       appearance: "subtle",
-      id: "create-repo-cancel"
-    }, "Cancel"), /*#__PURE__*/_react.default.createElement(_standardButton.default, {
+      id: "form-reset",
+      onClick: function onClick() {
+        return reset();
+      }
+    }, "Reset form"), /*#__PURE__*/_react.default.createElement(_standardButton.default, {
       appearance: "primary",
-      id: "create-repo-button",
+      id: "set-search-data",
       type: "submit"
-    }, "Create repository"))));
+    }, "Find issues"))));
   }));
 };
 var _default = SearchForm;
 exports.default = _default;
-},{"react":"../../../../../react => React.external","@atlaskit/button/button-group":"../node_modules/@atlaskit/button/dist/esm/entry-points/button-group.js","@atlaskit/button/standard-button":"../node_modules/@atlaskit/button/dist/esm/entry-points/standard-button.js","@atlaskit/select":"../node_modules/@atlaskit/select/dist/esm/index.js","@atlaskit/form":"../node_modules/@atlaskit/form/dist/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../src/features/projects/projectSlice":"../src/features/projects/projectSlice.js","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js"}],"App.jsx":[function(require,module,exports) {
+},{"react":"../../../../../react => React.external","@atlaskit/button/button-group":"../node_modules/@atlaskit/button/dist/esm/entry-points/button-group.js","@atlaskit/button/standard-button":"../node_modules/@atlaskit/button/dist/esm/entry-points/standard-button.js","@atlaskit/select":"../node_modules/@atlaskit/select/dist/esm/index.js","@atlaskit/form":"../node_modules/@atlaskit/form/dist/esm/index.js","@atlaskit/textfield":"../node_modules/@atlaskit/textfield/dist/esm/index.js","@atlaskit/spinner":"../node_modules/@atlaskit/spinner/dist/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../src/features/projects/projectSlice":"../src/features/projects/projectSlice.js","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js"}],"App.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51010,6 +51570,8 @@ var _checkbox = require("@atlaskit/checkbox");
 var _standardButton = _interopRequireDefault(require("@atlaskit/button/standard-button"));
 var _trash = _interopRequireDefault(require("@atlaskit/icon/glyph/trash"));
 var _badge = _interopRequireDefault(require("@atlaskit/badge"));
+var _filter = _interopRequireDefault(require("@atlaskit/icon/glyph/filter"));
+var _spinner = _interopRequireDefault(require("@atlaskit/spinner"));
 var _reactRedux = require("react-redux");
 var _issueSlice = require("../src/features/issues/issueSlice");
 var _react = _interopRequireWildcard(require("react"));
@@ -51036,6 +51598,27 @@ function App() {
     _useState2 = _slicedToArray(_useState, 2),
     highlightedRows = _useState2[0],
     setHighlightedRows = _useState2[1];
+  var _useState3 = (0, _react.useState)(false),
+    _useState4 = _slicedToArray(_useState3, 2),
+    isFiltered = _useState4[0],
+    setIsFiltered = _useState4[1];
+  var issuesList = (0, _reactRedux.useSelector)(function (state) {
+    return (0, _issueSlice.selectIssues)(state.issue, isFiltered);
+  });
+  var _useState5 = (0, _react.useState)(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    issuesPerPage = _useState6[0],
+    setIssuesPerPage = _useState6[1];
+  var _useState7 = (0, _react.useState)(true),
+    _useState8 = _slicedToArray(_useState7, 2),
+    isFirstSearch = _useState8[0],
+    setIsFirstSearch = _useState8[1];
+  var handleSetIssuesPerPage = function handleSetIssuesPerPage(number) {
+    setIssuesPerPage(number);
+  };
+  var handleSetIsFirstSearch = function handleSetIsFirstSearch() {
+    setIsFirstSearch(false);
+  };
   (0, _react.useEffect)(function () {
     var rows = [];
     issue.issues.forEach(function (i, index) {
@@ -51045,9 +51628,12 @@ function App() {
     });
     setHighlightedRows(rows);
   }, [issue.issues]);
+  var handleFilter = function handleFilter() {
+    setIsFiltered(!isFiltered);
+  };
 
   //rows with Redux data
-  var rows = issue.issues.map(function (issue, index) {
+  var rows = issuesList.map(function (issue, index) {
     return {
       key: "issue-row-".concat(issue.id),
       cells: [{
@@ -51124,24 +51710,37 @@ function App() {
       width: '1'
     }]
   };
+  var buttonAppearance = isFiltered ? 'link' : 'subtle-link';
+  var buttonCaption = isFiltered ? 'Unfilter' : 'Filter';
   return /*#__PURE__*/_react.default.createElement("div", {
     style: {
       padding: '24px',
-      //width:'98%',
-      //margin:'24px auto',
+      minHeight: '300px',
+      margin: '0 auto',
       boxSizing: 'border-box'
     }
-  }, /*#__PURE__*/_react.default.createElement(_SearchForm.default, null), !issue.loading && issue.error ? /*#__PURE__*/_react.default.createElement("div", null, "Error: ", issue.error) : null, !issue.loading && /*#__PURE__*/_react.default.createElement(_dynamicTable.default, {
-    caption: caption,
+  }, /*#__PURE__*/_react.default.createElement(_SearchForm.default, {
+    setIssuesPerPage: handleSetIssuesPerPage,
+    setIsFirstSearch: handleSetIsFirstSearch
+  }), !issue.loading && issue.error ? /*#__PURE__*/_react.default.createElement("div", null, "Error: ", issue.error) : null, !isFirstSearch && /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between'
+    }
+  }, /*#__PURE__*/_react.default.createElement("h2", null, "TodoList Tasks"), /*#__PURE__*/_react.default.createElement(_standardButton.default, {
+    onClick: handleFilter,
+    iconAfter: /*#__PURE__*/_react.default.createElement(_filter.default, null),
+    appearance: buttonAppearance
+  }, buttonCaption)), /*#__PURE__*/_react.default.createElement(_dynamicTable.default, {
     head: head,
     rows: rows,
-    rowsPerPage: 10,
+    rowsPerPage: issuesPerPage,
     defaultPage: 1,
     loadingSpinnerSize: "small",
     isLoading: issue.loading,
-    emptyView: /*#__PURE__*/_react.default.createElement("h2", null, "The table is empty and this is the empty view"),
+    emptyView: /*#__PURE__*/_react.default.createElement("h2", null, "Nothing found"),
     highlightedRowIndex: highlightedRows
-  }));
+  })));
 }
-},{"@atlaskit/dynamic-table":"../node_modules/@atlaskit/dynamic-table/dist/esm/index.js","@atlaskit/checkbox":"../node_modules/@atlaskit/checkbox/dist/esm/index.js","@atlaskit/button/standard-button":"../node_modules/@atlaskit/button/dist/esm/entry-points/standard-button.js","@atlaskit/icon/glyph/trash":"../node_modules/@atlaskit/icon/glyph/trash.js","@atlaskit/badge":"../node_modules/@atlaskit/badge/dist/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js","react":"../../../../../react => React.external","./SearchForm":"SearchForm.jsx"}]},{},["App.jsx"], "__root_component")
+},{"@atlaskit/dynamic-table":"../node_modules/@atlaskit/dynamic-table/dist/esm/index.js","@atlaskit/checkbox":"../node_modules/@atlaskit/checkbox/dist/esm/index.js","@atlaskit/button/standard-button":"../node_modules/@atlaskit/button/dist/esm/entry-points/standard-button.js","@atlaskit/icon/glyph/trash":"../node_modules/@atlaskit/icon/glyph/trash.js","@atlaskit/badge":"../node_modules/@atlaskit/badge/dist/esm/index.js","@atlaskit/icon/glyph/filter":"../node_modules/@atlaskit/icon/glyph/filter.js","@atlaskit/spinner":"../node_modules/@atlaskit/spinner/dist/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js","react":"../../../../../react => React.external","./SearchForm":"SearchForm.jsx"}]},{},["App.jsx"], "__root_component")
 //# sourceMappingURL=/App.js.map

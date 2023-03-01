@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-    loading: true,
+    loading: false,
     issues: [],
-    error: '',
-    isData: true
+    error: ''
 };
 
 export const fetchIssuesByQuery = createAsyncThunk('issue/fetchIssuesByQuery', async (query) => {
@@ -34,21 +33,29 @@ export const fetchIssuesByQuery = createAsyncThunk('issue/fetchIssuesByQuery', a
       .catch(err => console.error(err))
     
 }
-)
+);
+
+export const selectIssues = (state, isFiltered) => {
+    if (isFiltered) {
+        return state.issues.filter(i => !i.isChecked)
+    }
+    return state.issues;
+};
 
 export const issueSlice = createSlice({
     name: 'issue',
     initialState,
     reducers: {
         deleteIssue: (state, action) => {
-            state.issues = state.issues.filter(i => i.id !== action.payload);
+            const issueId = action.payload;
+            state.issues = state.issues.filter(i => i.id !== issueId);
         },
         checkIssue: (state, action) => {
             const index = action.payload;
             const element = state.issues.splice(index, 1)[0];
             element.isChecked = !element.isChecked;
             state.issues = element.isChecked ? [...state.issues, element] : [element, ...state.issues];
-        }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchIssuesByQuery.pending, (state) => {
@@ -58,13 +65,11 @@ export const issueSlice = createSlice({
             state.loading = false;
             state.issues = action.payload;
             state.error = '';
-            state.isData = Boolean(action.payload.length);
         });
         builder.addCase(fetchIssuesByQuery.rejected, (state, action) => {
             state.loading = false;
             state.issues = [];
             state.error = action.error.message;
-            state.isData = true;
         });
     }
 });
