@@ -2,6 +2,10 @@
   "name": "my-app",
   "version": "0.0.1",
   "private": true,
+  "engines": {
+    "node": "18.14.2",
+    "npm": "9.5.0"
+  },
   "externals": {
     "react": "React",
     "react-dom": "ReactDOM"
@@ -45,6 +49,7 @@
     "morgan": "^1.10.0",
     "nocache": "^2.1.0",
     "node-fetch": "^2.6.6",
+    "pg": "^8.9.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-is": "^18.2.0",
