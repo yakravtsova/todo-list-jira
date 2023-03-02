@@ -2,7 +2,7 @@
     "key": "teamlead-todolist",
     "name": "Teamlead TodoList",
     "description": "Teamlead TodoList",
-    "baseUrl": "https://cdde-37-99-67-56.eu.ngrok.io",
+    "baseUrl": "https://teamlead-todolist.herokuapp.com",
     "authentication": {
         "type": "jwt"
     },
