@@ -20,6 +20,7 @@ export default function App() {
   const issuesList = useSelector(state => selectIssues(state.issue, isFiltered));
   const [issuesPerPage, setIssuesPerPage] = useState(null);
   const [isFirstSearch, setIsFirstSearch] = useState(true);
+  let jwt;
 
   const handleSetIssuesPerPage = (number) => {
     setIssuesPerPage(number);
@@ -28,6 +29,13 @@ export default function App() {
   const handleSetIsFirstSearch = () => {
     setIsFirstSearch(false);
   }
+
+ /* useEffect(() => {
+    AP.context.getToken(function(token){
+      console.log(token);
+      jwt = token;
+    });
+  }, [])*/
 
   useEffect(() => {
     let rows = [];

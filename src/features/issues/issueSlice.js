@@ -7,7 +7,12 @@ const initialState = {
 };
 
 export const fetchIssuesByQuery = createAsyncThunk('issue/fetchIssuesByQuery', async (query) => {
-    return await fetch(`/search?jql=${query}`, {
+    const jwt = await AP.context.getToken()
+    .then((token) => {
+      return token
+    });
+    
+    return await fetch(`/search?jql=${query}%20order%20by%20created%20ASC&jwt=${jwt}`, {
         method: "GET",
         'Accept': 'application/json'
       })
@@ -31,7 +36,6 @@ export const fetchIssuesByQuery = createAsyncThunk('issue/fetchIssuesByQuery', a
         })
       })
       .catch(err => console.error(err))
-    
 }
 );
 

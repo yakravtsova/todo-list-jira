@@ -131,7 +131,10 @@ const initialState = {
   error: ''
 };
 const fetchIssuesByQuery = (0, _toolkit.createAsyncThunk)('issue/fetchIssuesByQuery', async query => {
-  return await fetch(`/search?jql=${query}`, {
+  const jwt = await AP.context.getToken().then(token => {
+    return token;
+  });
+  return await fetch(`/search?jql=${query}%20order%20by%20created%20ASC&jwt=${jwt}`, {
     method: "GET",
     'Accept': 'application/json'
   }).then(res => {
@@ -215,9 +218,15 @@ const initialState = {
   error: ''
 };
 const fetchProjects = (0, _toolkit.createAsyncThunk)('project/fetchProjects', async () => {
-  return await fetch('/projects', {
+  const jwt = await AP.context.getToken().then(token => {
+    return token;
+  });
+  const result = await fetch(`/projects?jwt=${jwt}`, {
     method: "GET",
-    'Accept': 'application/json'
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
   }).then(res => {
     return res.json();
   }).then(res => {
@@ -228,6 +237,7 @@ const fetchProjects = (0, _toolkit.createAsyncThunk)('project/fetchProjects', as
       };
     });
   }).catch(err => console.error(err));
+  return result;
 });
 exports.fetchProjects = fetchProjects;
 const projectSlice = (0, _toolkit.createSlice)({
@@ -252,6 +262,65 @@ const projectSlice = (0, _toolkit.createSlice)({
 exports.projectSlice = projectSlice;
 var _default = projectSlice.reducer;
 exports.default = _default;
+},{}],"../src/features/statuses/statusSlice.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.statusSlice = exports.fetchStatuses = exports.default = void 0;
+var _toolkit = require("@reduxjs/toolkit");
+const initialState = {
+  loading: true,
+  statuses: [],
+  error: ''
+};
+const fetchStatuses = (0, _toolkit.createAsyncThunk)('status/fetchStatuses', async () => {
+  const jwt = await AP.context.getToken().then(token => {
+    return token;
+  });
+  console.log('stat');
+  const result = await fetch(`/statuses?jwt=${jwt}`, {
+    method: "GET",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  }).then(res => {
+    return res.json();
+  }).then(res => {
+    return res.map(value => {
+      return {
+        label: value.name,
+        value: `'${value.name}'`
+      };
+    });
+  }).catch(err => console.error(err));
+  return result;
+});
+exports.fetchStatuses = fetchStatuses;
+const statusSlice = (0, _toolkit.createSlice)({
+  name: 'status',
+  initialState,
+  extraReducers: builder => {
+    builder.addCase(fetchStatuses.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(fetchStatuses.fulfilled, (state, action) => {
+      state.loading = false;
+      state.statuses = action.payload;
+      state.error = '';
+    });
+    builder.addCase(fetchStatuses.rejected, (state, action) => {
+      state.loading = false;
+      state.statuses = [];
+      state.error = action.error.message;
+    });
+  }
+});
+exports.statusSlice = statusSlice;
+var _default = statusSlice.reducer;
+exports.default = _default;
 },{}],"SearchForm.jsx":[function(require,module,exports) {
 "use strict";
 
@@ -268,6 +337,7 @@ var _textfield = _interopRequireDefault(require("@atlaskit/textfield"));
 var _spinner = _interopRequireDefault(require("@atlaskit/spinner"));
 var _reactRedux = require("react-redux");
 var _projectSlice = require("../src/features/projects/projectSlice");
+var _statusSlice = require("../src/features/statuses/statusSlice");
 var _issueSlice = require("../src/features/issues/issueSlice");
 const _excluded = ["id"],
   _excluded2 = ["id"];
@@ -283,22 +353,11 @@ const SearchForm = ({
 }) => {
   const dispatch = (0, _reactRedux.useDispatch)();
   const project = (0, _reactRedux.useSelector)(state => state.project);
+  const status = (0, _reactRedux.useSelector)(state => state.status);
   (0, _react.useEffect)(() => {
+    dispatch((0, _statusSlice.fetchStatuses)());
     dispatch((0, _projectSlice.fetchProjects)());
   }, []);
-  const status = [{
-    label: "Done",
-    value: "Done"
-  }, {
-    label: "In progress",
-    value: "'In Progress'"
-  }, {
-    label: "Test",
-    value: "Test"
-  }, {
-    label: "To Do",
-    value: "'To Do'"
-  }];
   const handleSubmit = data => {
     setIsFirstSearch();
     setIssuesPerPage(data.issuesPerPage);
@@ -330,10 +389,10 @@ const SearchForm = ({
       alignItems: 'center',
       minHeight: '300px'
     }
-  }, project.loading && /*#__PURE__*/_react.default.createElement(_spinner.default, {
+  }, project.loading && status.loading && /*#__PURE__*/_react.default.createElement(_spinner.default, {
     interactionName: "load",
     size: "large"
-  }), !project.loading && /*#__PURE__*/_react.default.createElement(_form.default, {
+  }), !project.loading && !status.loading && project.projects.length ? /*#__PURE__*/_react.default.createElement(_form.default, {
     onSubmit: data => handleSubmit(data)
   }, ({
     formProps,
@@ -373,7 +432,7 @@ const SearchForm = ({
     return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_select.default, _extends({
       inputId: id
     }, rest, {
-      options: status,
+      options: status.statuses,
       isMulti: true
     })));
   }), /*#__PURE__*/_react.default.createElement(_form.Field, {
@@ -396,11 +455,11 @@ const SearchForm = ({
     appearance: "primary",
     id: "set-search-data",
     type: "submit"
-  }, "Find issues"))))));
+  }, "Find issues"))))) : /*#__PURE__*/_react.default.createElement("div", null, "You don't have any projects yet"));
 };
 var _default = SearchForm;
 exports.default = _default;
-},{"../src/features/projects/projectSlice":"../src/features/projects/projectSlice.js","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js"}],"App.jsx":[function(require,module,exports) {
+},{"../src/features/projects/projectSlice":"../src/features/projects/projectSlice.js","../src/features/statuses/statusSlice":"../src/features/statuses/statusSlice.js","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js"}],"App.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -429,12 +488,21 @@ function App() {
   const issuesList = (0, _reactRedux.useSelector)(state => (0, _issueSlice.selectIssues)(state.issue, isFiltered));
   const [issuesPerPage, setIssuesPerPage] = (0, _react.useState)(null);
   const [isFirstSearch, setIsFirstSearch] = (0, _react.useState)(true);
+  let jwt;
   const handleSetIssuesPerPage = number => {
     setIssuesPerPage(number);
   };
   const handleSetIsFirstSearch = () => {
     setIsFirstSearch(false);
   };
+
+  /* useEffect(() => {
+     AP.context.getToken(function(token){
+       console.log(token);
+       jwt = token;
+     });
+   }, [])*/
+
   (0, _react.useEffect)(() => {
     let rows = [];
     issue.issues.forEach((i, index) => {

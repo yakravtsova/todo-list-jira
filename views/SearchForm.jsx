@@ -9,6 +9,7 @@ import Spinner from '@atlaskit/spinner';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProjects } from '../src/features/projects/projectSlice';
+import { fetchStatuses } from '../src/features/statuses/statusSlice';
 import { fetchIssuesByQuery } from '../src/features/issues/issueSlice';
 
 
@@ -16,17 +17,12 @@ const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
 
     const dispatch = useDispatch();
     const project = useSelector(state => state.project);
+    const status = useSelector(state => state.status);
 
     useEffect(() => {
+      dispatch(fetchStatuses());
       dispatch(fetchProjects());
     }, []);
-
-    const status = [
-      {label: "Done", value: "Done"},
-      {label: "In progress", value: "'In Progress'"},
-      {label: "Test", value: "Test"},
-      {label: "To Do", value: "'To Do'"}
-    ];
 
     const handleSubmit = (data) => {
       setIsFirstSearch();
@@ -63,8 +59,8 @@ const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
         minHeight: '300px'
       }}
     >
-      {project.loading && <Spinner interactionName="load" size="large" />}
-      {!project.loading && <Form onSubmit={(data) => handleSubmit(data)}>
+      {project.loading && status.loading && <Spinner interactionName="load" size="large" />}
+      {!project.loading && !status.loading && project.projects.length ? <Form onSubmit={(data) => handleSubmit(data)}>
         {({ formProps, reset }) => (
           <form
             {...formProps} noValidate
@@ -91,7 +87,7 @@ const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
             >
               {({ fieldProps: { id, ...rest } }) => (
                 <Fragment>
-                  <Select inputId={id} {...rest} options={status} isMulti />
+                  <Select inputId={id} {...rest} options={status.statuses} isMulti />
                 </Fragment>
               )}
             </Field>
@@ -128,7 +124,7 @@ const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
             </FormFooter>
           </form>
         )}
-      </Form>}
+      </Form> : <div>You don't have any projects yet</div>}
     </div>
   );
 };

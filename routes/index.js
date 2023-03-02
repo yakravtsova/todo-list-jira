@@ -2,79 +2,76 @@ const fetch = require('node-fetch');
 const { apiHost, authData } = require('../utils/constants');
 
 export default function routes(app, addon) {
-    // Redirect root path to /atlassian-connect.json,
-    // which will be served by atlassian-connect-express.
     app.get('/', (req, res) => {
         res.redirect('/atlassian-connect.json');
     });
 
-    app.get('/issue', async (req, res) => {
-      const response = await fetch(`${apiHost}/search`, {
-      method: "GET",
-      headers: {
-        'Authorization': `Basic ${Buffer.from(authData).toString('base64')}`,
-        'Accept': 'application/json',
-      }
-    })
-    .then(res => {
-      return res.json();
-  })
-    .catch(err => console.error(err));
-
-    return res.json(response);
-    });
-
-    app.get('/search', async (req, res) => {
-      const response = await fetch(`${apiHost}${req.originalUrl}`, {
-      method: "GET",
-      headers: {
-        'Authorization': `Basic ${Buffer.from(authData).toString('base64')}`,
-        'Accept': 'application/json',
-      }
-    })
-    .then(res => {
-      return res.json();
-  })
-    .catch(err => console.error(err));
-
-    return res.json(response);
+    app.get('/search', addon.checkValidToken(), async (req, res) => {
+      let queryString = req.originalUrl;
+      queryString = queryString.slice(0, queryString.indexOf('&')) 
+      const httpClient = addon.httpClient(req);
+      httpClient.get({
+        "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        "url": `/rest/api/3${queryString}`
+      },
+      function(err, response, body) {
+        if (err) { 
+          console.log(response.statusCode + ": " + err);
+          res.send("Error: " + response.statusCode + ": " + err);
+        }
+        else {
+          res.send(body);
+        }
+      });
     }
     );
-
-    app.get('/projects', async (req, res) => {
-      const response = await fetch(`${apiHost}/project/search`, {
-      method: "GET",
-      headers: {
-        'Authorization': `Basic ${Buffer.from(authData).toString('base64')}`,
-        'Accept': 'application/json',
-      }
-    })
-    .then(res => {
-      return res.json();
-  })
-    .catch(err => console.error(err));
-
-    return res.json(response);
+    
+    app.get('/projects', addon.checkValidToken(), (req, res) => {
+      const httpClient = addon.httpClient(req);
+      httpClient.get({
+        "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        "url": "/rest/api/3/project/search"
+      },
+      function(err, response, body) {
+        if (err) { 
+          console.log(response.statusCode + ": " + err);
+          res.send("Error: " + response.statusCode + ": " + err);
+        }
+        else {
+          res.send(body);
+        }
+      });
     });
 
-/*    app.get('https://yakravtsova.atlassian.net/rest/api/3/issue/picker?query=title', (req, res) => {
-      res.status(200).send(query);
-    });*/
-
-    // This is an example route used by "generalPages" module (see atlassian-connect.json).
-    // Verify that the incoming request is authenticated with Atlassian Connect.
-    app.get('/hello-world', addon.authenticate(), (req, res) => {
-        // Rendering a template is easy; the render method takes two params: the name of the component or template file, and its props.
-        // Handlebars and jsx are both supported, but please note that jsx changes require `npm run watch-jsx` in order to be picked up by the server.
-        res.render(
-          'hello-world.jsx', // change this to 'hello-world.jsx' to use the Atlaskit & React version
-          {
-            title: 'Atlassian Connect'
-            //, issueId: req.query['issueId']
-            //, browserOnly: true // you can set this to disable server-side rendering for react views
-          }
-        );
+    app.get('/statuses', addon.checkValidToken(), (req, res) => {
+      const httpClient = addon.httpClient(req);
+      httpClient.get({
+        "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        "url": "/rest/api/2/status"
+      },
+      function(err, response, body) {
+        if (err) { 
+          console.log(response.statusCode + ": " + err);
+          res.send("Error: " + response.statusCode + ": " + err);
+        }
+        else {
+          res.send(body);
+        }
+      });
     });
 
-    // Add additional route handlers here...
+    app.get('/todo', addon.authenticate(), (req, res) => {
+      res.render(
+        'hello-world.jsx',
+      );
+    });
 }

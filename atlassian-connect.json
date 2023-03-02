@@ -1,8 +1,8 @@
 {
-    "key": "my-app",
-    "name": "My app",
-    "description": "My very first app",
-    "baseUrl": "https://4a9c-173-244-154-141.eu.ngrok.io",
+    "key": "teamlead-todolist",
+    "name": "Teamlead TodoList",
+    "description": "Teamlead TodoList",
+    "baseUrl": "https://cdde-37-99-67-56.eu.ngrok.io",
     "authentication": {
         "type": "jwt"
     },
@@ -18,23 +18,12 @@
     "modules": {
         "generalPages": [
             {
-                "key": "hello-world-jira",
+                "key": "teamlead-todolist",
                 "location": "system.top.navigation.bar",
                 "name": {
-                    "value": "World"
+                    "value": "Teamlead TodoList"
                 },
-                "url": "/hello-world",
-                "conditions": [{
-                    "condition": "user_is_logged_in"
-                }]
-            },
-            {
-                "key": "hello-world-page-confluence",
-                "location": "system.header/left",
-                "name": {
-                    "value": "World"
-                },
-                "url": "/hello-world",
+                "url": "/todo",
                 "conditions": [{
                     "condition": "user_is_logged_in"
                 }]

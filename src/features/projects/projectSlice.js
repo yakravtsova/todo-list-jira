@@ -7,19 +7,27 @@ const initialState = {
 };
 
 export const fetchProjects = createAsyncThunk('project/fetchProjects', async () => {
-  return await fetch('/projects', {
-    method: "GET",
-    'Accept': 'application/json',
-    })
-    .then(res => {
-      return res.json();
-    })
-    .then(res => {
-      return res.values.map(value => {
-        return {label: value.name, value: value.key}
-      });
-    })
-    .catch(err => console.error(err))
+  const jwt = await AP.context.getToken()
+    .then((token) => {
+      return token
+    });
+    const result = await fetch(`/projects?jwt=${jwt}`, {
+      method: "GET",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      })
+      .then(res => {
+        return res.json();
+      })
+      .then(res => {
+        return res.values.map(value => {
+          return {label: value.name, value: value.key}
+        });
+      })
+      .catch(err => console.error(err))
+      return result;
     }
 )
 
