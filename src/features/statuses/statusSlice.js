@@ -11,7 +11,6 @@ export const fetchStatuses = createAsyncThunk('status/fetchStatuses', async () =
     .then((token) => {
       return token
     });
-    console.log('stat')
     const result = await fetch(`/statuses?jwt=${jwt}`, {
       method: "GET",
       headers: {

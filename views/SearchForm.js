@@ -1875,7 +1875,7 @@ function murmur2(str) {
 }
 var _default = murmur2;
 exports.default = _default;
-},{}],"../node_modules/@emotion/serialize/node_modules/@emotion/unitless/dist/emotion-unitless.esm.js":[function(require,module,exports) {
+},{}],"../node_modules/@emotion/unitless/dist/emotion-unitless.esm.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2202,7 +2202,7 @@ var serializeStyles = function serializeStyles(args, registered, mergedProps) {
   };
 };
 exports.serializeStyles = serializeStyles;
-},{"@emotion/hash":"../node_modules/@emotion/hash/dist/emotion-hash.esm.js","@emotion/unitless":"../node_modules/@emotion/serialize/node_modules/@emotion/unitless/dist/emotion-unitless.esm.js","@emotion/memoize":"../node_modules/@emotion/memoize/dist/emotion-memoize.esm.js"}],"../node_modules/@emotion/use-insertion-effect-with-fallbacks/dist/emotion-use-insertion-effect-with-fallbacks.browser.esm.js":[function(require,module,exports) {
+},{"@emotion/hash":"../node_modules/@emotion/hash/dist/emotion-hash.esm.js","@emotion/unitless":"../node_modules/@emotion/unitless/dist/emotion-unitless.esm.js","@emotion/memoize":"../node_modules/@emotion/memoize/dist/emotion-memoize.esm.js"}],"../node_modules/@emotion/use-insertion-effect-with-fallbacks/dist/emotion-use-insertion-effect-with-fallbacks.browser.esm.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29944,7 +29944,1196 @@ Object.defineProperty(exports, "default", {
 var _textField = _interopRequireDefault(require("./text-field"));
 var _styles = require("./styles");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./text-field":"../node_modules/@atlaskit/textfield/dist/esm/text-field.js","./styles":"../node_modules/@atlaskit/textfield/dist/esm/styles.js"}],"../node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js":[function(require,module,exports) {
+},{"./text-field":"../node_modules/@atlaskit/textfield/dist/esm/text-field.js","./styles":"../node_modules/@atlaskit/textfield/dist/esm/styles.js"}],"../node_modules/@atlaskit/button/dist/esm/shared/loading-spinner.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = LoadingSpinner;
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
+var _react = _interopRequireDefault(require("react"));
+var _spinner = _interopRequireDefault(require("@atlaskit/spinner"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _excluded = ["spacing"];
+function getSpinnerAppearance(_ref) {
+  var appearance = _ref.appearance,
+    isDisabled = _ref.isDisabled,
+    isSelected = _ref.isSelected;
+  if (isDisabled) {
+    return 'inherit';
+  }
+  if (isSelected) {
+    return 'invert';
+  }
+  if (appearance === 'primary' || appearance === 'danger') {
+    return 'invert';
+  }
+  return 'inherit';
+}
+function LoadingSpinner(_ref2) {
+  var _ref2$spacing = _ref2.spacing,
+    spacing = _ref2$spacing === void 0 ? 'default' : _ref2$spacing,
+    rest = (0, _objectWithoutProperties2.default)(_ref2, _excluded);
+  var size = spacing === 'default' ? 'medium' : 'small';
+  return /*#__PURE__*/_react.default.createElement(_spinner.default, {
+    size: size,
+    appearance: getSpinnerAppearance(rest)
+  });
+}
+},{"@babel/runtime/helpers/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","react":"../../../../../react => React.external","@atlaskit/spinner":"../node_modules/@atlaskit/spinner/dist/esm/index.js"}],"../node_modules/@atlaskit/button/dist/esm/custom-theme-button/theme.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+exports.defaultThemeFn = defaultThemeFn;
+exports.getCustomCss = getCustomCss;
+exports.getSpecifiers = getSpecifiers;
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _components = require("@atlaskit/theme/components");
+var _css = require("../shared/css");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = null != arguments[i] ? arguments[i] : {};
+    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+      (0, _defineProperty2.default)(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+var stateToSelectorMap = {
+  focus: '&:focus',
+  focusSelected: '&:focus',
+  hover: '&:hover',
+  active: '&:active',
+  disabled: '&[disabled]'
+};
+
+// Mapping the new clean css back to the legacy theme format.
+// The legacy theme format has all styles at the top level (no nested selectors)
+// and uses `getSpecifiers()` to apply the style to all pseudo states
+function getCustomCss(_ref) {
+  var _ref$appearance = _ref.appearance,
+    appearance = _ref$appearance === void 0 ? 'default' : _ref$appearance,
+    _ref$spacing = _ref.spacing,
+    spacing = _ref$spacing === void 0 ? 'default' : _ref$spacing,
+    _ref$mode = _ref.mode,
+    mode = _ref$mode === void 0 ? 'light' : _ref$mode,
+    _ref$isSelected = _ref.isSelected,
+    isSelected = _ref$isSelected === void 0 ? false : _ref$isSelected,
+    _ref$shouldFitContain = _ref.shouldFitContainer,
+    shouldFitContainer = _ref$shouldFitContain === void 0 ? false : _ref$shouldFitContain,
+    _ref$iconIsOnlyChild = _ref.iconIsOnlyChild,
+    iconIsOnlyChild = _ref$iconIsOnlyChild === void 0 ? false : _ref$iconIsOnlyChild,
+    _ref$isLoading = _ref.isLoading,
+    isLoading = _ref$isLoading === void 0 ? false : _ref$isLoading,
+    state = _ref.state;
+  var result = (0, _css.getCss)({
+    appearance: appearance,
+    spacing: spacing,
+    mode: mode,
+    isSelected: isSelected,
+    shouldFitContainer: shouldFitContainer,
+    isOnlySingleIcon: iconIsOnlyChild
+  });
+
+  // we need to disable the default browser focus styles always
+  // this is because we are not expressing that we can have two pseudo states at a time
+  result.outline = 'none';
+
+  // Pulling relevant styles up to the top level
+  var selector = stateToSelectorMap[state];
+  if (selector) {
+    result = _objectSpread(_objectSpread({}, result), result[selector]);
+  }
+  if (isLoading) {
+    result = _objectSpread(_objectSpread({}, result), result['&[data-has-overlay="true"]']);
+  }
+
+  // Delete all selectors and just keep root styles
+  Object.keys(result).forEach(function (key) {
+    // want to keep this one
+    if (key === '&::-moz-focus-inner') {
+      return;
+    }
+
+    // Not using .startsWith for ie11
+    if (key.indexOf('&') === 0) {
+      delete result[key];
+    }
+  });
+  return result;
+}
+
+// This styling approach works by generating a 'style' and applying with maximum specificity
+// To do this we are overwriting all pseudo selectors
+function getSpecifiers(styles) {
+  return {
+    '&, &:hover, &:active, &:focus, &:visited, &:disabled, &[disabled]': styles
+  };
+}
+function defaultThemeFn(current, values) {
+  return current(values);
+}
+var Theme = (0, _components.createTheme)(function (themeProps) {
+  return {
+    buttonStyles: getCustomCss(themeProps),
+    // No styles being applied directly to spinner by default
+    // Keeping this for legacy compat. We could remove it, but given
+    // that we are changing theme soon there is no point
+    spinnerStyles: {}
+  };
+});
+
+// eslint-disable-next-line @repo/internal/react/require-jsdoc
+var _default = Theme;
+exports.default = _default;
+},{"@babel/runtime/helpers/defineProperty":"../node_modules/@babel/runtime/helpers/defineProperty.js","@atlaskit/theme/components":"../node_modules/@atlaskit/theme/dist/esm/components.js","../shared/css":"../node_modules/@atlaskit/button/dist/esm/shared/css.js"}],"../node_modules/@atlaskit/button/dist/esm/custom-theme-button/custom-theme-button.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
+var _react = _interopRequireWildcard(require("react"));
+var _components = _interopRequireDefault(require("@atlaskit/theme/components"));
+var _buttonBase = _interopRequireDefault(require("../shared/button-base"));
+var _getIsOnlySingleIcon = _interopRequireDefault(require("../shared/get-is-only-single-icon"));
+var _loadingSpinner = _interopRequireDefault(require("../shared/loading-spinner"));
+var _theme = _interopRequireWildcard(require("./theme"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _excluded = ["appearance", "autoFocus", "isDisabled", "isSelected", "shouldFitContainer", "spacing", "isLoading", "onMouseEnter", "onMouseLeave", "onMouseDown", "onMouseUp", "onFocus", "onBlur", "theme"];
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = null != arguments[i] ? arguments[i] : {};
+    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+      (0, _defineProperty2.default)(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function getInteractionState(_ref) {
+  var _ref$isDisabled = _ref.isDisabled,
+    isDisabled = _ref$isDisabled === void 0 ? false : _ref$isDisabled,
+    _ref$isActive = _ref.isActive,
+    isActive = _ref$isActive === void 0 ? false : _ref$isActive,
+    _ref$isFocus = _ref.isFocus,
+    isFocus = _ref$isFocus === void 0 ? false : _ref$isFocus,
+    _ref$isHover = _ref.isHover,
+    isHover = _ref$isHover === void 0 ? false : _ref$isHover,
+    _ref$isSelected = _ref.isSelected,
+    isSelected = _ref$isSelected === void 0 ? false : _ref$isSelected,
+    _ref$isLoading = _ref.isLoading,
+    isLoading = _ref$isLoading === void 0 ? false : _ref$isLoading;
+  if (isDisabled) {
+    return 'disabled';
+  }
+  if (isSelected && isFocus) {
+    return 'focusSelected';
+  }
+  if (isSelected) {
+    return 'selected';
+  }
+  // not allowing active or focus style changes while loading
+  if (!isLoading && isActive) {
+    return 'active';
+  }
+  if (!isLoading && isHover) {
+    return 'hover';
+  }
+  if (isFocus) {
+    return 'focus';
+  }
+  return 'default';
+}
+var initial = {
+  isHover: false,
+  isActive: false,
+  isFocus: false
+};
+
+/**
+ * __Custom theme button__
+ *
+ * A custom theme button. Avoid using this component. It exists for those already using custom theming, which is hard to use and has performance issues.
+ *
+ * - [Examples](https://atlassian.design/components/button/examples#custom-theme-button)
+ */
+var CustomThemeButton = /*#__PURE__*/_react.default.memo( /*#__PURE__*/_react.default.forwardRef(function CustomThemeButton(_ref2, ref) {
+  var _ref2$appearance = _ref2.appearance,
+    appearance = _ref2$appearance === void 0 ? 'default' : _ref2$appearance,
+    _ref2$autoFocus = _ref2.autoFocus,
+    autoFocus = _ref2$autoFocus === void 0 ? false : _ref2$autoFocus,
+    _ref2$isDisabled = _ref2.isDisabled,
+    isDisabled = _ref2$isDisabled === void 0 ? false : _ref2$isDisabled,
+    _ref2$isSelected = _ref2.isSelected,
+    isSelected = _ref2$isSelected === void 0 ? false : _ref2$isSelected,
+    _ref2$shouldFitContai = _ref2.shouldFitContainer,
+    shouldFitContainer = _ref2$shouldFitContai === void 0 ? false : _ref2$shouldFitContai,
+    _ref2$spacing = _ref2.spacing,
+    spacing = _ref2$spacing === void 0 ? 'default' : _ref2$spacing,
+    _ref2$isLoading = _ref2.isLoading,
+    isLoading = _ref2$isLoading === void 0 ? false : _ref2$isLoading,
+    providedOnMouseEnter = _ref2.onMouseEnter,
+    providedOnMouseLeave = _ref2.onMouseLeave,
+    providedOnMouseDown = _ref2.onMouseDown,
+    providedOnMouseUp = _ref2.onMouseUp,
+    providedOnFocus = _ref2.onFocus,
+    providedOnBlur = _ref2.onBlur,
+    _ref2$theme = _ref2.theme,
+    theme = _ref2$theme === void 0 ? _theme.defaultThemeFn : _ref2$theme,
+    rest = (0, _objectWithoutProperties2.default)(_ref2, _excluded);
+  // TODO is there a nicer way to do this?
+  // Add default props back into object for spreading
+  var restProps = _objectSpread({
+    appearance: appearance,
+    autoFocus: autoFocus,
+    isDisabled: isDisabled,
+    isSelected: isSelected,
+    shouldFitContainer: shouldFitContainer,
+    spacing: spacing
+  }, rest);
+  var _useState = (0, _react.useState)(initial),
+    _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+    state = _useState2[0],
+    setState = _useState2[1];
+  var onMouseEnter = (0, _react.useCallback)(function (event) {
+    setState(function (current) {
+      return _objectSpread(_objectSpread({}, current), {}, {
+        isHover: true
+      });
+    });
+    if (providedOnMouseEnter) {
+      providedOnMouseEnter(event);
+    }
+  }, [providedOnMouseEnter]);
+  var onMouseLeave = (0, _react.useCallback)(function (event) {
+    setState(function (current) {
+      return _objectSpread(_objectSpread({}, current), {}, {
+        isHover: false,
+        isActive: false
+      });
+    });
+    if (providedOnMouseLeave) {
+      providedOnMouseLeave(event);
+    }
+  }, [providedOnMouseLeave]);
+  var onMouseDown = (0, _react.useCallback)(function (event) {
+    setState(function (current) {
+      return _objectSpread(_objectSpread({}, current), {}, {
+        isActive: true
+      });
+    });
+    if (providedOnMouseDown) {
+      providedOnMouseDown(event);
+    }
+  }, [providedOnMouseDown]);
+  var onMouseUp = (0, _react.useCallback)(function (event) {
+    setState(function (current) {
+      return _objectSpread(_objectSpread({}, current), {}, {
+        isActive: false
+      });
+    });
+    if (providedOnMouseUp) {
+      providedOnMouseUp(event);
+    }
+  }, [providedOnMouseUp]);
+  var onFocus = (0, _react.useCallback)(function (event) {
+    setState(function (current) {
+      return _objectSpread(_objectSpread({}, current), {}, {
+        isFocus: true
+      });
+    });
+    if (providedOnFocus) {
+      providedOnFocus(event);
+    }
+  }, [providedOnFocus]);
+  var onBlur = (0, _react.useCallback)(function (event) {
+    setState(function (current) {
+      return _objectSpread(_objectSpread({}, current), {}, {
+        isFocus: false
+      });
+    });
+    if (providedOnBlur) {
+      providedOnBlur(event);
+    }
+  }, [providedOnBlur]);
+  return /*#__PURE__*/_react.default.createElement(_theme.default.Provider, {
+    value: theme
+  }, /*#__PURE__*/_react.default.createElement(_components.default.Consumer, null, function (_ref3) {
+    var mode = _ref3.mode;
+    return /*#__PURE__*/_react.default.createElement(_theme.default.Consumer, (0, _extends2.default)({
+      mode: mode,
+      state: getInteractionState(_objectSpread(_objectSpread({}, state), {}, {
+        isLoading: isLoading,
+        isSelected: restProps.isSelected,
+        isDisabled: restProps.isDisabled
+      })),
+      iconIsOnlyChild: (0, _getIsOnlySingleIcon.default)(restProps),
+      isLoading: isLoading
+    }, restProps), function (_ref4) {
+      var buttonStyles = _ref4.buttonStyles;
+      return /*#__PURE__*/_react.default.createElement(_buttonBase.default, (0, _extends2.default)({}, restProps, {
+        ref: ref,
+        overlay: isLoading ? /*#__PURE__*/_react.default.createElement(_loadingSpinner.default, restProps) : null,
+        onMouseEnter: onMouseEnter,
+        onMouseLeave: onMouseLeave,
+        onMouseDown: onMouseDown,
+        onMouseUp: onMouseUp,
+        onFocus: onFocus,
+        onBlur: onBlur,
+        buttonCss: (0, _theme.getSpecifiers)(buttonStyles)
+      }));
+    });
+  }));
+}));
+
+// Tools including enzyme rely on components having a display name
+CustomThemeButton.displayName = 'CustomThemeButton';
+var _default = CustomThemeButton;
+exports.default = _default;
+},{"@babel/runtime/helpers/extends":"../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/slicedToArray":"../node_modules/@babel/runtime/helpers/slicedToArray.js","@babel/runtime/helpers/defineProperty":"../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","react":"../../../../../react => React.external","@atlaskit/theme/components":"../node_modules/@atlaskit/theme/dist/esm/components.js","../shared/button-base":"../node_modules/@atlaskit/button/dist/esm/shared/button-base.js","../shared/get-is-only-single-icon":"../node_modules/@atlaskit/button/dist/esm/shared/get-is-only-single-icon.js","../shared/loading-spinner":"../node_modules/@atlaskit/button/dist/esm/shared/loading-spinner.js","./theme":"../node_modules/@atlaskit/button/dist/esm/custom-theme-button/theme.js"}],"../node_modules/@atlaskit/button/dist/esm/custom-theme-button/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "Theme", {
+  enumerable: true,
+  get: function () {
+    return _theme.default;
+  }
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _customThemeButton.default;
+  }
+});
+var _customThemeButton = _interopRequireDefault(require("./custom-theme-button"));
+var _theme = _interopRequireDefault(require("./theme"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./custom-theme-button":"../node_modules/@atlaskit/button/dist/esm/custom-theme-button/custom-theme-button.js","./theme":"../node_modules/@atlaskit/button/dist/esm/custom-theme-button/theme.js"}],"../node_modules/@atlaskit/button/dist/esm/entry-points/custom-theme-button.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "Theme", {
+  enumerable: true,
+  get: function () {
+    return _customThemeButton.Theme;
+  }
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _customThemeButton.default;
+  }
+});
+var _customThemeButton = _interopRequireWildcard(require("../custom-theme-button"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+},{"../custom-theme-button":"../node_modules/@atlaskit/button/dist/esm/custom-theme-button/index.js"}],"../node_modules/@atlaskit/popper/dist/esm/popper.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Popper = Popper;
+Object.defineProperty(exports, "placements", {
+  enumerable: true,
+  get: function () {
+    return _core.placements;
+  }
+});
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
+var _react = _interopRequireWildcard(require("react"));
+var _reactPopper = require("react-popper");
+var _core = require("@popperjs/core");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+// Export types from PopperJS / React Popper
+
+var constantModifiers = [{
+  name: 'flip',
+  options: {
+    flipVariations: false,
+    padding: 5,
+    boundary: 'clippingParents',
+    rootBoundary: 'viewport'
+  }
+}, {
+  name: 'preventOverflow',
+  options: {
+    padding: 5,
+    rootBoundary: 'document'
+  }
+}];
+function defaultChildrenFn() {
+  return null;
+}
+var defaultOffset = [0, 8];
+function Popper(_ref) {
+  var _ref$children = _ref.children,
+    children = _ref$children === void 0 ? defaultChildrenFn : _ref$children,
+    _ref$offset = _ref.offset,
+    offset = _ref$offset === void 0 ? defaultOffset : _ref$offset,
+    _ref$placement = _ref.placement,
+    placement = _ref$placement === void 0 ? 'bottom-start' : _ref$placement,
+    _ref$referenceElement = _ref.referenceElement,
+    referenceElement = _ref$referenceElement === void 0 ? undefined : _ref$referenceElement,
+    modifiers = _ref.modifiers,
+    _ref$strategy = _ref.strategy,
+    strategy = _ref$strategy === void 0 ? 'fixed' : _ref$strategy;
+  var _offset = (0, _slicedToArray2.default)(offset, 2),
+    offsetX = _offset[0],
+    offsetY = _offset[1];
+
+  // Merge a new offset modifier only if new offset values passed in
+  var internalModifiers = (0, _react.useMemo)(function () {
+    var offsetModifier = {
+      name: 'offset',
+      options: {
+        offset: [offsetX, offsetY]
+      }
+    };
+    return [].concat(constantModifiers, [offsetModifier]);
+  }, [offsetX, offsetY]); // Merge custom props and memoize
+
+  var mergedModifiers = (0, _react.useMemo)(function () {
+    if (modifiers == null) {
+      return internalModifiers;
+    }
+    return [].concat((0, _toConsumableArray2.default)(internalModifiers), (0, _toConsumableArray2.default)(modifiers));
+  }, [internalModifiers, modifiers]);
+  return /*#__PURE__*/_react.default.createElement(_reactPopper.Popper, {
+    modifiers: mergedModifiers,
+    placement: placement,
+    strategy: strategy,
+    referenceElement: referenceElement
+  }, children);
+}
+},{"@babel/runtime/helpers/toConsumableArray":"../node_modules/@babel/runtime/helpers/toConsumableArray.js","@babel/runtime/helpers/slicedToArray":"../node_modules/@babel/runtime/helpers/slicedToArray.js","react":"../../../../../react => React.external","react-popper":"../node_modules/react-popper/lib/esm/index.js","@popperjs/core":"../node_modules/@popperjs/core/lib/index.js"}],"../node_modules/@atlaskit/popper/dist/esm/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "Manager", {
+  enumerable: true,
+  get: function () {
+    return _reactPopper.Manager;
+  }
+});
+Object.defineProperty(exports, "Popper", {
+  enumerable: true,
+  get: function () {
+    return _popper.Popper;
+  }
+});
+Object.defineProperty(exports, "Reference", {
+  enumerable: true,
+  get: function () {
+    return _reactPopper.Reference;
+  }
+});
+Object.defineProperty(exports, "placements", {
+  enumerable: true,
+  get: function () {
+    return _popper.placements;
+  }
+});
+var _popper = require("./popper");
+var _reactPopper = require("react-popper");
+},{"./popper":"../node_modules/@atlaskit/popper/dist/esm/popper.js","react-popper":"../node_modules/react-popper/lib/esm/index.js"}],"../node_modules/@atlaskit/inline-dialog/dist/esm/InlineDialog/styled/container.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Container = void 0;
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _react = _interopRequireWildcard(require("react"));
+var _react2 = require("@emotion/react");
+var _colors = require("@atlaskit/theme/colors");
+var _components = require("@atlaskit/theme/components");
+var _constants = require("@atlaskit/theme/constants");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = null != arguments[i] ? arguments[i] : {};
+    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+      (0, _defineProperty2.default)(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/** @jsx jsx */
+
+var themedBackground = (0, _components.themed)({
+  light: "var(--ds-surface-overlay, ".concat(_colors.N0, ")"),
+  dark: "var(--ds-surface-overlay, ".concat(_colors.DN50, ")")
+});
+var themedColor = (0, _components.themed)({
+  light: "var(--ds-text, ".concat(_colors.N900, ")"),
+  dark: "var(--ds-text, ".concat(_colors.DN600, ")")
+});
+var themedBoxShadow = (0, _components.themed)({
+  light: "var(--ds-shadow-overlay, ".concat("0 4px 8px -2px ".concat(_colors.N50A, ", 0 0 1px ").concat(_colors.N60A), ")"),
+  dark: "var(--ds-shadow-overlay, ".concat("0 4px 8px -2px ".concat(_colors.DN50A, ", 0 0 1px ").concat(_colors.DN60A), ")")
+});
+var borderRadius = (0, _constants.borderRadius)();
+var gridSize = (0, _constants.gridSize)();
+var CSS_THEME_BACKGROUND = '--theme-background';
+var CSS_THEME_COLOR = '--theme-color';
+var CSS_THEME_BOX_SHADOW = '--theme-box-shadow';
+var containerStyles = (0, _react2.css)({
+  boxSizing: 'content-box',
+  maxWidth: "".concat(gridSize * 56, "px"),
+  maxHeight: "".concat(gridSize * 56, "px"),
+  padding: "var(--ds-space-200, 16px)".concat(" ", "var(--ds-space-300, 24px)"),
+  zIndex: _constants.layers.dialog(),
+  background: "var(".concat(CSS_THEME_BACKGROUND, ")"),
+  borderRadius: "".concat(borderRadius, "px"),
+  boxShadow: "var(".concat(CSS_THEME_BOX_SHADOW, ")"),
+  color: "var(".concat(CSS_THEME_COLOR, ")"),
+  '&:focus': {
+    outline: 'none'
+  }
+});
+/**
+ * __Container__
+ *
+ * A container is used as a styled wrapper around the contents of an inline dialog.
+ * Note that the styles here are merged with the style prop that comes from the popper.js library.
+ *
+ */
+var Container = /*#__PURE__*/(0, _react.forwardRef)(function (_ref, ref) {
+  var _objectSpread2;
+  var children = _ref.children,
+    onBlur = _ref.onBlur,
+    onClick = _ref.onClick,
+    onFocus = _ref.onFocus,
+    style = _ref.style,
+    testId = _ref.testId;
+  var theme = (0, _components.useGlobalTheme)();
+  return (0, _react2.jsx)("div", {
+    css: containerStyles,
+    "data-testid": testId,
+    onBlur: onBlur,
+    onClick: onClick,
+    onFocus: onFocus,
+    ref: ref,
+    style: _objectSpread((_objectSpread2 = {}, (0, _defineProperty2.default)(_objectSpread2, CSS_THEME_BACKGROUND, themedBackground(theme)), (0, _defineProperty2.default)(_objectSpread2, CSS_THEME_COLOR, themedColor(theme)), (0, _defineProperty2.default)(_objectSpread2, CSS_THEME_BOX_SHADOW, themedBoxShadow(theme)), _objectSpread2), style)
+  }, children);
+});
+exports.Container = Container;
+},{"@babel/runtime/helpers/defineProperty":"../node_modules/@babel/runtime/helpers/defineProperty.js","react":"../../../../../react => React.external","@emotion/react":"../node_modules/@emotion/react/dist/emotion-react.browser.esm.js","@atlaskit/theme/colors":"../node_modules/@atlaskit/theme/dist/esm/colors.js","@atlaskit/theme/components":"../node_modules/@atlaskit/theme/dist/esm/components.js","@atlaskit/theme/constants":"../node_modules/@atlaskit/theme/dist/esm/constants.js"}],"../node_modules/@atlaskit/inline-dialog/dist/esm/InlineDialog/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.InlineDialogWithoutAnalytics = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _react2 = require("@emotion/react");
+var _bindEventListener = require("bind-event-listener");
+var _reactNodeResolver = _interopRequireDefault(require("react-node-resolver"));
+var _analyticsNext = require("@atlaskit/analytics-next");
+var _noop = _interopRequireDefault(require("@atlaskit/ds-lib/noop"));
+var _popper = require("@atlaskit/popper");
+var _container = require("./styled/container");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+/** @jsx jsx */
+
+var packageName = "@atlaskit/inline-dialog";
+var packageVersion = "13.4.8";
+var checkIsChildOfPortal = function checkIsChildOfPortal(node) {
+  if (!node) {
+    return false;
+  }
+  return node.classList && node.classList.contains('atlaskit-portal-container') || checkIsChildOfPortal(node.parentElement);
+};
+var InlineDialog = /*#__PURE__*/(0, _react.memo)(function InlineDialog(_ref) {
+  var _ref$isOpen = _ref.isOpen,
+    isOpen = _ref$isOpen === void 0 ? false : _ref$isOpen,
+    _ref$onContentBlur = _ref.onContentBlur,
+    onContentBlur = _ref$onContentBlur === void 0 ? _noop.default : _ref$onContentBlur,
+    _ref$onContentClick = _ref.onContentClick,
+    onContentClick = _ref$onContentClick === void 0 ? _noop.default : _ref$onContentClick,
+    _ref$onContentFocus = _ref.onContentFocus,
+    onContentFocus = _ref$onContentFocus === void 0 ? _noop.default : _ref$onContentFocus,
+    _ref$onClose = _ref.onClose,
+    onClose = _ref$onClose === void 0 ? _noop.default : _ref$onClose,
+    _ref$placement = _ref.placement,
+    placement = _ref$placement === void 0 ? 'bottom-start' : _ref$placement,
+    _ref$strategy = _ref.strategy,
+    strategy = _ref$strategy === void 0 ? 'fixed' : _ref$strategy,
+    testId = _ref.testId,
+    content = _ref.content,
+    children = _ref.children;
+  var containerRef = (0, _react.useRef)(null);
+  var triggerRef = (0, _react.useRef)(null);
+  // we put this into a ref to avoid handleClickOutside having this as a dependency
+  var onCloseRef = (0, _react.useRef)(onClose);
+  (0, _react.useEffect)(function () {
+    onCloseRef.current = onClose;
+  });
+  var handleClickOutside = (0, _react.useCallback)(function (event) {
+    var target = event.target;
+
+    // checks for when target is not HTMLElement
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+
+    // TODO: This is to handle the case where the target is no longer in the DOM.
+    // This happens with react-select in datetime picker. There might be other
+    // edge cases for this.
+    if (!document.body.contains(target)) {
+      return;
+    }
+
+    // exit if we click outside but on the trigger — it can handle the clicks itself
+    if (triggerRef.current && triggerRef.current.contains(target)) {
+      return;
+    }
+
+    // handles the case where inline dialog opens portalled elements such as modal
+    if (checkIsChildOfPortal(target)) {
+      return;
+    }
+
+    // call onClose if the click originated from outside the dialog
+    if (containerRef.current && !containerRef.current.contains(target)) {
+      var _onCloseRef$current;
+      (_onCloseRef$current = onCloseRef.current) === null || _onCloseRef$current === void 0 ? void 0 : _onCloseRef$current.call(onCloseRef, {
+        isOpen: false,
+        event: event
+      });
+    }
+  }, []);
+  (0, _react.useEffect)(function () {
+    if (!isOpen) {
+      return;
+    }
+    var unbind = (0, _bindEventListener.bind)(window, {
+      type: 'click',
+      listener: handleClickOutside,
+      options: {
+        capture: true
+      }
+    });
+    return unbind;
+  }, [isOpen, handleClickOutside]);
+  var popper = isOpen ? (0, _react2.jsx)(_popper.Popper, {
+    placement: placement,
+    strategy: strategy
+  }, function (_ref2) {
+    var _ref3 = _ref2.ref,
+      style = _ref2.style;
+    return (0, _react2.jsx)(_container.Container, {
+      onBlur: onContentBlur,
+      onFocus: onContentFocus,
+      onClick: onContentClick,
+      ref: function ref(node) {
+        if (node) {
+          containerRef.current = node;
+          if (typeof _ref3 === 'function') {
+            _ref3(node);
+          } else {
+            _ref3.current = node;
+          }
+        }
+      },
+      style: style,
+      testId: testId
+    }, content);
+  }) : null;
+  return (0, _react2.jsx)(_popper.Manager, null, (0, _react2.jsx)(_popper.Reference, null, function (_ref4) {
+    var ref = _ref4.ref;
+    return (0, _react2.jsx)(_reactNodeResolver.default, {
+      innerRef: function innerRef(node) {
+        triggerRef.current = node;
+        if (typeof ref === 'function') {
+          ref(node);
+        } else {
+          ref.current = node;
+        }
+      }
+    }, children);
+  }), popper);
+});
+exports.InlineDialogWithoutAnalytics = InlineDialog;
+InlineDialog.displayName = 'InlineDialog';
+var createAndFireEventOnAtlaskit = (0, _analyticsNext.createAndFireEvent)('atlaskit');
+var _default = (0, _analyticsNext.withAnalyticsContext)({
+  componentName: 'inlineDialog',
+  packageName: packageName,
+  packageVersion: packageVersion
+})((0, _analyticsNext.withAnalyticsEvents)({
+  onClose: createAndFireEventOnAtlaskit({
+    action: 'closed',
+    actionSubject: 'inlineDialog',
+    attributes: {
+      componentName: 'inlineDialog',
+      packageName: packageName,
+      packageVersion: packageVersion
+    }
+  })
+})(InlineDialog));
+exports.default = _default;
+},{"react":"../../../../../react => React.external","@emotion/react":"../node_modules/@emotion/react/dist/emotion-react.browser.esm.js","bind-event-listener":"../node_modules/bind-event-listener/dist/index.js","react-node-resolver":"../node_modules/react-node-resolver/lib/index.js","@atlaskit/analytics-next":"../node_modules/@atlaskit/analytics-next/dist/esm/index.js","@atlaskit/ds-lib/noop":"../node_modules/@atlaskit/ds-lib/dist/esm/utils/noop.js","@atlaskit/popper":"../node_modules/@atlaskit/popper/dist/esm/index.js","./styled/container":"../node_modules/@atlaskit/inline-dialog/dist/esm/InlineDialog/styled/container.js"}],"../node_modules/@atlaskit/inline-dialog/dist/esm/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _InlineDialog.default;
+  }
+});
+var _InlineDialog = _interopRequireDefault(require("./InlineDialog"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./InlineDialog":"../node_modules/@atlaskit/inline-dialog/dist/esm/InlineDialog/index.js"}],"../node_modules/@atlaskit/icon/glyph/check-circle.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _base = require("@atlaskit/icon/base");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const CheckCircleIcon = props => /*#__PURE__*/_react.default.createElement(_base.Icon, Object.assign({
+  dangerouslySetGlyph: `<svg width="24" height="24" viewBox="0 0 24 24" role="presentation"><g fill-rule="evenodd"><circle fill="currentColor" cx="12" cy="12" r="10"/><path d="M9.707 11.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 10-1.414-1.414L11 12.586l-1.293-1.293z" fill="inherit"/></g></svg>`
+}, props));
+
+CheckCircleIcon.displayName = 'CheckCircleIcon';
+var _default = CheckCircleIcon;
+exports.default = _default;
+},{"react":"../../../../../react => React.external","@atlaskit/icon/base":"../node_modules/@atlaskit/icon/dist/esm/entry-points/base.js"}],"../node_modules/@atlaskit/icon/glyph/info.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _base = require("@atlaskit/icon/base");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const InfoIcon = props => /*#__PURE__*/_react.default.createElement(_base.Icon, Object.assign({
+  dangerouslySetGlyph: `<svg width="24" height="24" viewBox="0 0 24 24" role="presentation"><g fill-rule="evenodd"><path d="M2 12c0 5.523 4.477 10 10 10s10-4.477 10-10S17.523 2 12 2 2 6.477 2 12z" fill="currentColor"/><rect fill="inherit" x="11" y="10" width="2" height="7" rx="1"/><circle fill="inherit" cx="12" cy="8" r="1"/></g></svg>`
+}, props));
+
+InfoIcon.displayName = 'InfoIcon';
+var _default = InfoIcon;
+exports.default = _default;
+},{"react":"../../../../../react => React.external","@atlaskit/icon/base":"../node_modules/@atlaskit/icon/dist/esm/entry-points/base.js"}],"../node_modules/@atlaskit/icon/glyph/warning.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _base = require("@atlaskit/icon/base");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const WarningIcon = props => /*#__PURE__*/_react.default.createElement(_base.Icon, Object.assign({
+  dangerouslySetGlyph: `<svg width="24" height="24" viewBox="0 0 24 24" role="presentation"><g fill-rule="evenodd"><path d="M12.938 4.967c-.518-.978-1.36-.974-1.876 0L3.938 18.425c-.518.978-.045 1.771 1.057 1.771h14.01c1.102 0 1.573-.797 1.057-1.771L12.938 4.967z" fill="currentColor"/><path d="M12 15a1 1 0 01-1-1V9a1 1 0 012 0v5a1 1 0 01-1 1m0 3a1 1 0 010-2 1 1 0 010 2" fill="inherit"/></g></svg>`
+}, props));
+
+WarningIcon.displayName = 'WarningIcon';
+var _default = WarningIcon;
+exports.default = _default;
+},{"react":"../../../../../react => React.external","@atlaskit/icon/base":"../node_modules/@atlaskit/icon/dist/esm/entry-points/base.js"}],"../node_modules/@atlaskit/inline-message/dist/esm/constants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.typesMapping = exports.VAR_SECONDARY_TEXT_COLOR = void 0;
+var _checkCircle = _interopRequireDefault(require("@atlaskit/icon/glyph/check-circle"));
+var _error = _interopRequireDefault(require("@atlaskit/icon/glyph/error"));
+var _info = _interopRequireDefault(require("@atlaskit/icon/glyph/info"));
+var _warning = _interopRequireDefault(require("@atlaskit/icon/glyph/warning"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var typesMapping = {
+  connectivity: {
+    icon: _warning.default,
+    defaultLabel: 'connectivity inline message'
+  },
+  confirmation: {
+    icon: _checkCircle.default,
+    defaultLabel: 'confirmation inline message'
+  },
+  info: {
+    icon: _info.default,
+    defaultLabel: 'info inline message'
+  },
+  warning: {
+    icon: _warning.default,
+    defaultLabel: 'warning inline message'
+  },
+  error: {
+    icon: _error.default,
+    defaultLabel: 'error inline message'
+  }
+};
+exports.typesMapping = typesMapping;
+var VAR_SECONDARY_TEXT_COLOR = '--secondary-text-color';
+exports.VAR_SECONDARY_TEXT_COLOR = VAR_SECONDARY_TEXT_COLOR;
+},{"@atlaskit/icon/glyph/check-circle":"../node_modules/@atlaskit/icon/glyph/check-circle.js","@atlaskit/icon/glyph/error":"../node_modules/@atlaskit/icon/glyph/error.js","@atlaskit/icon/glyph/info":"../node_modules/@atlaskit/icon/glyph/info.js","@atlaskit/icon/glyph/warning":"../node_modules/@atlaskit/icon/glyph/warning.js"}],"../node_modules/@atlaskit/inline-message/dist/esm/components/message-icon/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _react = require("@emotion/react");
+var colors = _interopRequireWildcard(require("@atlaskit/theme/colors"));
+var _components = require("@atlaskit/theme/components");
+var _constants = require("../../constants");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+/** @jsx jsx */
+
+var iconColor = (0, _components.themed)('appearance', {
+  connectivity: {
+    light: "var(--ds-icon-brand, ".concat(colors.B400, ")"),
+    dark: "var(--ds-icon-brand, ".concat(colors.B100, ")")
+  },
+  confirmation: {
+    light: "var(--ds-icon-success, ".concat(colors.G300, ")"),
+    dark: "var(--ds-icon-success, ".concat(colors.G300, ")")
+  },
+  info: {
+    light: "var(--ds-icon-discovery, ".concat(colors.P300, ")"),
+    dark: "var(--ds-icon-discovery, ".concat(colors.P300, ")")
+  },
+  warning: {
+    light: "var(--ds-icon-warning, ".concat(colors.Y300, ")"),
+    dark: "var(--ds-icon-warning, ".concat(colors.Y300, ")")
+  },
+  error: {
+    light: "var(--ds-icon-danger, ".concat(colors.R400, ")"),
+    dark: "var(--ds-icon-danger, ".concat(colors.R400, ")")
+  }
+});
+var iconWrapperStyles = (0, _react.css)({
+  display: 'flex',
+  alignItems: 'center',
+  flex: '0 0 auto',
+  color: 'var(--icon-color)'
+});
+var iconColorStyles = (0, _react.css)({
+  color: 'var(--icon-accent-color)'
+});
+
+/**
+ * __Selected icon__
+ *
+ * The selected icon is used as the primary interactive element for the dialog.
+ * Can be used with or without supporting text.
+ */
+var SelectedIcon = function SelectedIcon(_ref) {
+  var appearance = _ref.appearance,
+    isOpen = _ref.isOpen,
+    label = _ref.label;
+  var _typesMapping$appeara = _constants.typesMapping[appearance],
+    SelectedIcon = _typesMapping$appeara.icon,
+    defaultLabel = _typesMapping$appeara.defaultLabel;
+  var theme = (0, _components.useGlobalTheme)();
+  return (0, _react.jsx)("span", {
+    "data-ds--inline-message--icon": true,
+    style: {
+      '--icon-color': iconColor({
+        appearance: appearance,
+        theme: theme
+      })
+    },
+    css: [iconWrapperStyles, isOpen && iconColorStyles]
+  }, (0, _react.jsx)(SelectedIcon, {
+    testId: "inline-message-icon",
+    label: label || defaultLabel,
+    size: "medium"
+  }));
+};
+var _default = SelectedIcon;
+exports.default = _default;
+},{"@emotion/react":"../node_modules/@emotion/react/dist/emotion-react.browser.esm.js","@atlaskit/theme/colors":"../node_modules/@atlaskit/theme/dist/esm/colors.js","@atlaskit/theme/components":"../node_modules/@atlaskit/theme/dist/esm/components.js","../../constants":"../node_modules/@atlaskit/inline-message/dist/esm/constants.js"}],"../node_modules/@atlaskit/inline-message/dist/esm/components/inline-message/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
+var _react = require("react");
+var _react2 = require("@emotion/react");
+var _customThemeButton = _interopRequireDefault(require("@atlaskit/button/custom-theme-button"));
+var _inlineDialog = _interopRequireDefault(require("@atlaskit/inline-dialog"));
+var colors = _interopRequireWildcard(require("@atlaskit/theme/colors"));
+var _components = require("@atlaskit/theme/components");
+var _constants = require("../../constants");
+var _messageIcon = _interopRequireDefault(require("../message-icon"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+/** @jsx jsx */
+
+var buttonContentsStyles = (0, _react2.css)({
+  display: 'flex',
+  alignItems: 'center',
+  textDecoration: 'none'
+});
+var titleStyles = (0, _react2.css)({
+  padding: "var(--ds-space-0, 0px)".concat(" ", "var(--ds-space-050, 4px)"),
+  fontWeight: "var(--ds-font-weight-medium, 500)"
+});
+var textStyles = (0, _react2.css)({
+  padding: "var(--ds-space-0, 0px)".concat(" ", "var(--ds-space-050, 4px)"),
+  color: "var(".concat(_constants.VAR_SECONDARY_TEXT_COLOR, ")"),
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap'
+});
+var rootStyles = (0, _react2.css)({
+  display: 'inline-block',
+  maxWidth: '100%',
+  '&:focus': {
+    outline: '1px solid'
+  },
+  '&:hover': {
+    // eslint-disable-next-line @repo/internal/styles/no-nested-styles
+    '[data-ds--inline-message--icon]': {
+      // Legacy style
+      color: 'var(--icon-accent-color)'
+    },
+    // eslint-disable-next-line @repo/internal/styles/no-nested-styles
+    '[data-ds--inline-message--button]': {
+      textDecoration: 'underline'
+    }
+  },
+  // eslint-disable-next-line @repo/internal/styles/no-nested-styles
+  '[data-ds--inline-message--button]': {
+    '&:active [data-ds--inline-message--secondary-text]': {
+      color: "var(--ds-text-subtle, ".concat("var(".concat(_constants.VAR_SECONDARY_TEXT_COLOR, ")"), ")")
+    }
+  }
+});
+var titleColor = (0, _components.themed)({
+  light: "var(--ds-text, ".concat(colors.N600, ")"),
+  dark: "var(--ds-text, ".concat(colors.DN600, ")")
+});
+var textColor = (0, _components.themed)({
+  light: "var(--ds-text-subtlest, ".concat(colors.N300, ")"),
+  dark: "var(--ds-text-subtlest, ".concat(colors.DN100, ")")
+});
+var iconColor = (0, _components.themed)('appearance', {
+  connectivity: {
+    light: "var(--ds-icon-brand, ".concat(colors.B300, ")"),
+    dark: "var(--ds-icon-brand, ".concat(colors.B75, ")")
+  },
+  confirmation: {
+    light: "var(--ds-icon-success, ".concat(colors.G200, ")"),
+    dark: "var(--ds-icon-success, ".concat(colors.G200, ")")
+  },
+  info: {
+    light: "var(--ds-icon-discovery, ".concat(colors.P200, ")"),
+    dark: "var(--ds-icon-discovery, ".concat(colors.P200, ")")
+  },
+  warning: {
+    light: "var(--ds-icon-warning, ".concat(colors.Y200, ")"),
+    dark: "var(--ds-icon-warning, ".concat(colors.Y200, ")")
+  },
+  error: {
+    light: "var(--ds-icon-danger, ".concat(colors.R300, ")"),
+    dark: "var(--ds-icon-danger, ".concat(colors.R300, ")")
+  }
+});
+
+/**
+ * __Inline message__
+ *
+ * An inline message lets users know when important information is available or when an action is required.
+ *
+ * - [Examples](https://atlassian.design/components/inline-message/examples)
+ * - [Code](https://atlassian.design/components/inline-message/code)
+ * - [Usage](https://atlassian.design/components/inline-message/usage)
+ *
+ * @example
+ *
+ * ```jsx
+ * const Component = () => (
+ *   <InlineMessage
+ *    title="Inline Message Title Example"
+ *    secondaryText="Secondary Text"
+ *   >
+ *    <p>Some text that would be inside the open dialog and otherwise hidden.</p>
+ *   </InlineMessage>
+ * );
+ * ```
+ */
+var InlineMessage = function InlineMessage(_ref) {
+  var _ref$placement = _ref.placement,
+    placement = _ref$placement === void 0 ? 'bottom-start' : _ref$placement,
+    _ref$secondaryText = _ref.secondaryText,
+    secondaryText = _ref$secondaryText === void 0 ? '' : _ref$secondaryText,
+    _ref$title = _ref.title,
+    title = _ref$title === void 0 ? '' : _ref$title,
+    _ref$type = _ref.type,
+    type = _ref$type === void 0 ? 'connectivity' : _ref$type,
+    appearance = _ref.appearance,
+    children = _ref.children,
+    testId = _ref.testId,
+    iconLabel = _ref.iconLabel;
+  var _useState = (0, _react.useState)(false),
+    _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+    isOpen = _useState2[0],
+    setIsOpen = _useState2[1];
+  var toggleDialog = (0, _react.useCallback)(function () {
+    setIsOpen(function (oldState) {
+      return !oldState;
+    });
+  }, [setIsOpen]);
+  var onCloseDialog = (0, _react.useCallback)(function () {
+    return setIsOpen(false);
+  }, [setIsOpen]);
+  var theme = (0, _components.useGlobalTheme)();
+  if (!appearance) {
+    appearance = type;
+  }
+  return (0, _react2.jsx)("div", {
+    css: rootStyles,
+    style: {
+      '--icon-accent-color': iconColor({
+        appearance: appearance,
+        theme: theme
+      })
+    },
+    "data-testid": testId
+  }, (0, _react2.jsx)(_inlineDialog.default, {
+    onClose: onCloseDialog,
+    content: children,
+    isOpen: isOpen,
+    placement: placement,
+    testId: testId && "".concat(testId, "--inline-dialog")
+  }, (0, _react2.jsx)(_customThemeButton.default, {
+    "data-ds--inline-message--button": true,
+    appearance: "subtle-link",
+    onClick: toggleDialog,
+    spacing: "none",
+    testId: testId && "".concat(testId, "--button")
+  }, (0, _react2.jsx)("div", {
+    css: buttonContentsStyles
+  }, (0, _react2.jsx)(_messageIcon.default, {
+    isOpen: isOpen,
+    appearance: appearance,
+    label: iconLabel
+  }), title && (0, _react2.jsx)("span", {
+    style: {
+      color: titleColor({
+        theme: theme
+      })
+    },
+    css: titleStyles,
+    "data-testid": testId && "".concat(testId, "--title")
+  }, title), secondaryText && (0, _react2.jsx)("span", {
+    "data-ds--inline-message--secondary-text": true,
+    style: (0, _defineProperty2.default)({}, _constants.VAR_SECONDARY_TEXT_COLOR, textColor({
+      theme: theme
+    })),
+    css: textStyles,
+    "data-testid": testId && "".concat(testId, "--text")
+  }, secondaryText)))));
+};
+var _default = InlineMessage;
+exports.default = _default;
+},{"@babel/runtime/helpers/defineProperty":"../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/slicedToArray":"../node_modules/@babel/runtime/helpers/slicedToArray.js","react":"../../../../../react => React.external","@emotion/react":"../node_modules/@emotion/react/dist/emotion-react.browser.esm.js","@atlaskit/button/custom-theme-button":"../node_modules/@atlaskit/button/dist/esm/entry-points/custom-theme-button.js","@atlaskit/inline-dialog":"../node_modules/@atlaskit/inline-dialog/dist/esm/index.js","@atlaskit/theme/colors":"../node_modules/@atlaskit/theme/dist/esm/colors.js","@atlaskit/theme/components":"../node_modules/@atlaskit/theme/dist/esm/components.js","../../constants":"../node_modules/@atlaskit/inline-message/dist/esm/constants.js","../message-icon":"../node_modules/@atlaskit/inline-message/dist/esm/components/message-icon/index.js"}],"../node_modules/@atlaskit/inline-message/dist/esm/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _inlineMessage.default;
+  }
+});
+var _inlineMessage = _interopRequireDefault(require("./components/inline-message"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./components/inline-message":"../node_modules/@atlaskit/inline-message/dist/esm/components/inline-message/index.js"}],"../node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js":[function(require,module,exports) {
 /**
  * @license React
  * use-sync-external-store-shim.development.js
@@ -36276,8 +37465,7 @@ var fetchStatuses = (0, _toolkit.createAsyncThunk)('status/fetchStatuses', /*#__
         });
       case 2:
         jwt = _context.sent;
-        console.log('stat');
-        _context.next = 6;
+        _context.next = 5;
         return fetch("/statuses?jwt=".concat(jwt), {
           method: "GET",
           headers: {
@@ -36296,10 +37484,10 @@ var fetchStatuses = (0, _toolkit.createAsyncThunk)('status/fetchStatuses', /*#__
         }).catch(function (err) {
           return console.error(err);
         });
-      case 6:
+      case 5:
         result = _context.sent;
         return _context.abrupt("return", result);
-      case 8:
+      case 7:
       case "end":
         return _context.stop();
     }
@@ -36334,7 +37522,7 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.selectIssues = exports.issueSlice = exports.fetchIssuesByQuery = exports.deleteIssue = exports.default = exports.checkIssue = void 0;
+exports.selectIssues = exports.issueSlice = exports.fetchIssuesByQuery = exports.deleteIssueById = exports.deleteIssue = exports.default = exports.checkIssue = void 0;
 var _toolkit = require("@reduxjs/toolkit");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -36364,7 +37552,7 @@ var fetchIssuesByQuery = (0, _toolkit.createAsyncThunk)('issue/fetchIssuesByQuer
         case 2:
           jwt = _context.sent;
           _context.next = 5;
-          return fetch("/search?jql=".concat(query, "%20order%20by%20created%20ASC&jwt=").concat(jwt), {
+          return fetch("/search?".concat(query, "&jwt=").concat(jwt), {
             method: "GET",
             'Accept': 'application/json'
           }).then(function (res) {
@@ -36400,6 +37588,40 @@ var fetchIssuesByQuery = (0, _toolkit.createAsyncThunk)('issue/fetchIssuesByQuer
   };
 }());
 exports.fetchIssuesByQuery = fetchIssuesByQuery;
+var deleteIssueById = (0, _toolkit.createAsyncThunk)('issue/deleteIssueById', /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(issueId) {
+    var jwt;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.next = 2;
+          return AP.context.getToken().then(function (token) {
+            return token;
+          });
+        case 2:
+          jwt = _context2.sent;
+          _context2.next = 5;
+          return fetch("/issue/".concat(issueId, "?jwt=").concat(jwt), {
+            method: "DELETE",
+            'Accept': 'application/json'
+          }).then(function (res) {
+            return issueId;
+          }).catch(function (err) {
+            return console.error(err);
+          });
+        case 5:
+          return _context2.abrupt("return", _context2.sent);
+        case 6:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2);
+  }));
+  return function (_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}());
+exports.deleteIssueById = deleteIssueById;
 var selectIssues = function selectIssues(state, isFiltered) {
   if (isFiltered) {
     return state.issues.filter(function (i) {
@@ -36413,12 +37635,6 @@ var issueSlice = (0, _toolkit.createSlice)({
   name: 'issue',
   initialState: initialState,
   reducers: {
-    deleteIssue: function deleteIssue(state, action) {
-      var issueId = action.payload;
-      state.issues = state.issues.filter(function (i) {
-        return i.id !== issueId;
-      });
-    },
     checkIssue: function checkIssue(state, action) {
       var index = action.payload;
       var element = state.issues.splice(index, 1)[0];
@@ -36438,6 +37654,20 @@ var issueSlice = (0, _toolkit.createSlice)({
     builder.addCase(fetchIssuesByQuery.rejected, function (state, action) {
       state.loading = false;
       state.issues = [];
+      state.error = action.error.message;
+    });
+    builder.addCase(deleteIssueById.pending, function (state) {
+      state.loading = true;
+    });
+    builder.addCase(deleteIssueById.fulfilled, function (state, action) {
+      state.loading = false;
+      state.issues = state.issues = state.issues.filter(function (i) {
+        return i.id !== action.payload;
+      });
+      state.error = '';
+    });
+    builder.addCase(deleteIssueById.rejected, function (state, action) {
+      state.loading = false;
       state.error = action.error.message;
     });
   }
@@ -36464,6 +37694,7 @@ var _select = _interopRequireDefault(require("@atlaskit/select"));
 var _form = _interopRequireWildcard(require("@atlaskit/form"));
 var _textfield = _interopRequireDefault(require("@atlaskit/textfield"));
 var _spinner = _interopRequireDefault(require("@atlaskit/spinner"));
+var _inlineMessage = _interopRequireDefault(require("@atlaskit/inline-message"));
 var _reactRedux = require("react-redux");
 var _projectSlice = require("../src/features/projects/projectSlice");
 var _statusSlice = require("../src/features/statuses/statusSlice");
@@ -36483,8 +37714,7 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var SearchForm = function SearchForm(_ref) {
-  var setIsFirstSearch = _ref.setIsFirstSearch,
-    setIssuesPerPage = _ref.setIssuesPerPage;
+  var setIsFirstSearch = _ref.setIsFirstSearch;
   var dispatch = (0, _reactRedux.useDispatch)();
   var project = (0, _reactRedux.useSelector)(function (state) {
     return state.project;
@@ -36498,7 +37728,6 @@ var SearchForm = function SearchForm(_ref) {
   }, []);
   var handleSubmit = function handleSubmit(data) {
     setIsFirstSearch();
-    setIssuesPerPage(data.issuesPerPage);
     var queryString = [];
     for (var key in data) {
       if (data[key].length && key !== 'issuesPerPage') {
@@ -36508,15 +37737,15 @@ var SearchForm = function SearchForm(_ref) {
         queryString = [].concat(_toConsumableArray(queryString), ["".concat(key, "%20in%20(").concat(params, ")")]);
       }
     }
-    queryString = queryString.length ? queryString.join('%20AND%20') : '';
+    queryString = queryString.length ? "jql=".concat(queryString.join('%20AND%20'), "&maxResults=").concat(data.issuesPerPage) : "maxResults=".concat(data.issuesPerPage);
     dispatch((0, _issueSlice.fetchIssuesByQuery)(queryString));
   };
   var validate = function validate(value) {
-    if (value < 5) {
-      return "LESS_THAN_FIVE";
+    if (value < 1) {
+      return "LESS_THAN_ONE";
     }
-    if (value > 15) {
-      return "MORE_THAN_FIFTEEN";
+    if (value > 200) {
+      return "MORE_THAN_TWO_HUNDRED";
     }
     return;
   };
@@ -36532,7 +37761,10 @@ var SearchForm = function SearchForm(_ref) {
   }, project.loading && status.loading && /*#__PURE__*/_react.default.createElement(_spinner.default, {
     interactionName: "load",
     size: "large"
-  }), !project.loading && !status.loading && project.projects.length ? /*#__PURE__*/_react.default.createElement(_form.default, {
+  }), (!project.loading || !status.loading) && !project.projects.length && /*#__PURE__*/_react.default.createElement(_inlineMessage.default, {
+    appearance: "warning",
+    title: "You don't have any projects yet"
+  }), (!project.loading || !status.loading) && !!project.projects.length && /*#__PURE__*/_react.default.createElement(_form.default, {
     onSubmit: function onSubmit(data) {
       return handleSubmit(data);
     }
@@ -36573,17 +37805,17 @@ var SearchForm = function SearchForm(_ref) {
       })));
     }), /*#__PURE__*/_react.default.createElement(_form.Field, {
       name: "issuesPerPage",
-      label: "Number of issues per page",
-      defaultValue: "5",
+      label: "Maximum number of tasks per page",
+      defaultValue: "50",
       validate: validate
     }, function (_ref5) {
       var fieldProps = _ref5.fieldProps,
         error = _ref5.error;
       return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_textfield.default, _extends({}, fieldProps, {
         type: "number",
-        min: "5",
-        max: "15"
-      })), error === 'LESS_THAN_FIVE' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be grater than or equal to 5"), error === 'MORE_THAN_FIFTEEN' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be less than or equal to 15"));
+        min: "1",
+        max: "200"
+      })), error === 'LESS_THAN_ONE' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be grater than or equal to 1"), error === 'MORE_THAN_TWO_HUNDRED' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be less than or equal to 200"));
     }), /*#__PURE__*/_react.default.createElement(_form.FormFooter, null, /*#__PURE__*/_react.default.createElement(_buttonGroup.default, null, /*#__PURE__*/_react.default.createElement(_standardButton.default, {
       appearance: "subtle",
       id: "form-reset",
@@ -36595,9 +37827,9 @@ var SearchForm = function SearchForm(_ref) {
       id: "set-search-data",
       type: "submit"
     }, "Find issues"))));
-  }) : /*#__PURE__*/_react.default.createElement("div", null, "You don't have any projects yet"));
+  }));
 };
 var _default = SearchForm;
 exports.default = _default;
-},{"react":"../../../../../react => React.external","@atlaskit/button/button-group":"../node_modules/@atlaskit/button/dist/esm/entry-points/button-group.js","@atlaskit/button/standard-button":"../node_modules/@atlaskit/button/dist/esm/entry-points/standard-button.js","@atlaskit/select":"../node_modules/@atlaskit/select/dist/esm/index.js","@atlaskit/form":"../node_modules/@atlaskit/form/dist/esm/index.js","@atlaskit/textfield":"../node_modules/@atlaskit/textfield/dist/esm/index.js","@atlaskit/spinner":"../node_modules/@atlaskit/spinner/dist/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../src/features/projects/projectSlice":"../src/features/projects/projectSlice.js","../src/features/statuses/statusSlice":"../src/features/statuses/statusSlice.js","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js"}]},{},["SearchForm.jsx"], "__root_component")
+},{"react":"../../../../../react => React.external","@atlaskit/button/button-group":"../node_modules/@atlaskit/button/dist/esm/entry-points/button-group.js","@atlaskit/button/standard-button":"../node_modules/@atlaskit/button/dist/esm/entry-points/standard-button.js","@atlaskit/select":"../node_modules/@atlaskit/select/dist/esm/index.js","@atlaskit/form":"../node_modules/@atlaskit/form/dist/esm/index.js","@atlaskit/textfield":"../node_modules/@atlaskit/textfield/dist/esm/index.js","@atlaskit/spinner":"../node_modules/@atlaskit/spinner/dist/esm/index.js","@atlaskit/inline-message":"../node_modules/@atlaskit/inline-message/dist/esm/index.js","react-redux":"../node_modules/react-redux/es/index.js","../src/features/projects/projectSlice":"../src/features/projects/projectSlice.js","../src/features/statuses/statusSlice":"../src/features/statuses/statusSlice.js","../src/features/issues/issueSlice":"../src/features/issues/issueSlice.js"}]},{},["SearchForm.jsx"], "__root_component")
 //# sourceMappingURL=/SearchForm.js.map

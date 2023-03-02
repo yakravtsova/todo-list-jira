@@ -6,6 +6,7 @@ import Select from '@atlaskit/select';
 import Form, { Field, FormFooter, FormHeader, ErrorMessage } from '@atlaskit/form';
 import Textfield from '@atlaskit/textfield';
 import Spinner from '@atlaskit/spinner';
+import InlineMessage from '@atlaskit/inline-message';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProjects } from '../src/features/projects/projectSlice';
@@ -13,7 +14,7 @@ import { fetchStatuses } from '../src/features/statuses/statusSlice';
 import { fetchIssuesByQuery } from '../src/features/issues/issueSlice';
 
 
-const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
+const SearchForm = ({setIsFirstSearch}) => {
 
     const dispatch = useDispatch();
     const project = useSelector(state => state.project);
@@ -26,7 +27,6 @@ const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
 
     const handleSubmit = (data) => {
       setIsFirstSearch();
-      setIssuesPerPage(data.issuesPerPage);
       let queryString = [];
       for (let key in data) {
         if (data[key].length && key !== 'issuesPerPage') {
@@ -34,16 +34,16 @@ const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
           queryString = [...queryString, `${key}%20in%20(${params})`];
         }
       }
-      queryString = queryString.length ? queryString.join('%20AND%20') : '';
+      queryString = queryString.length ? `jql=${queryString.join('%20AND%20')}&maxResults=${data.issuesPerPage}` : `maxResults=${data.issuesPerPage}`;
       dispatch(fetchIssuesByQuery(queryString));
     };
 
     const validate = (value) => {
-      if (value < 5) {
-        return "LESS_THAN_FIVE"
+      if (value < 1) {
+        return "LESS_THAN_ONE"
       }
-      if (value > 15) {
-        return "MORE_THAN_FIFTEEN"
+      if (value > 200) {
+        return "MORE_THAN_TWO_HUNDRED"
       }
       return;
     }
@@ -60,7 +60,9 @@ const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
       }}
     >
       {project.loading && status.loading && <Spinner interactionName="load" size="large" />}
-      {!project.loading && !status.loading && project.projects.length ? <Form onSubmit={(data) => handleSubmit(data)}>
+      {(!project.loading || !status.loading) && !project.projects.length && 
+        <InlineMessage appearance="warning" title="You don't have any projects yet"/>}
+      {(!project.loading || !status.loading) && !!project.projects.length && <Form onSubmit={(data) => handleSubmit(data)}>
         {({ formProps, reset }) => (
           <form
             {...formProps} noValidate
@@ -91,18 +93,18 @@ const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
                 </Fragment>
               )}
             </Field>
-            <Field name="issuesPerPage" label="Number of issues per page"  defaultValue="5" validate={validate} >
+            <Field name="issuesPerPage" label="Maximum number of tasks per page"  defaultValue="50" validate={validate} >
               {({ fieldProps, error }) => (
                 <Fragment>
-                  <Textfield {...fieldProps} type="number" min="5" max="15" />
-                  {error === 'LESS_THAN_FIVE' && (
+                  <Textfield {...fieldProps} type="number" min="1" max="200" />
+                  {error === 'LESS_THAN_ONE' && (
                     <ErrorMessage>
-                      Value must be grater than or equal to 5
+                      Value must be grater than or equal to 1
                     </ErrorMessage>
                   )}
-                  {error === 'MORE_THAN_FIFTEEN' && (
+                  {error === 'MORE_THAN_TWO_HUNDRED' && (
                     <ErrorMessage>
-                      Value must be less than or equal to 15
+                      Value must be less than or equal to 200
                     </ErrorMessage>
                   )}
                   </Fragment>
@@ -124,7 +126,7 @@ const SearchForm = ({setIsFirstSearch, setIssuesPerPage}) => {
             </FormFooter>
           </form>
         )}
-      </Form> : <div>You don't have any projects yet</div>}
+      </Form>}
     </div>
   );
 };

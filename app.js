@@ -1,7 +1,4 @@
-// Entry point for the app
 
-// Express is the underlying that atlassian-connect-express uses:
-// https://expressjs.com
 import express from 'express';
 
 // https://expressjs.com/en/guide/using-middleware.html

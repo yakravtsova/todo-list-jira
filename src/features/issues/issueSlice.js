@@ -12,7 +12,7 @@ export const fetchIssuesByQuery = createAsyncThunk('issue/fetchIssuesByQuery', a
       return token
     });
     
-    return await fetch(`/search?jql=${query}%20order%20by%20created%20ASC&jwt=${jwt}`, {
+    return await fetch(`/search?${query}&jwt=${jwt}`, {
         method: "GET",
         'Accept': 'application/json'
       })
@@ -39,6 +39,23 @@ export const fetchIssuesByQuery = createAsyncThunk('issue/fetchIssuesByQuery', a
 }
 );
 
+export const deleteIssueById = createAsyncThunk('issue/deleteIssueById', async (issueId) => {
+    const jwt = await AP.context.getToken()
+    .then((token) => {
+      return token
+    });
+    
+    return await fetch(`/issue/${issueId}?jwt=${jwt}`, {
+        method: "DELETE",
+        'Accept': 'application/json'
+      })
+      .then(res => {
+        return issueId;
+      })
+      .catch(err => console.error(err))
+}
+);
+
 export const selectIssues = (state, isFiltered) => {
     if (isFiltered) {
         return state.issues.filter(i => !i.isChecked)
@@ -50,10 +67,6 @@ export const issueSlice = createSlice({
     name: 'issue',
     initialState,
     reducers: {
-        deleteIssue: (state, action) => {
-            const issueId = action.payload;
-            state.issues = state.issues.filter(i => i.id !== issueId);
-        },
         checkIssue: (state, action) => {
             const index = action.payload;
             const element = state.issues.splice(index, 1)[0];
@@ -73,6 +86,18 @@ export const issueSlice = createSlice({
         builder.addCase(fetchIssuesByQuery.rejected, (state, action) => {
             state.loading = false;
             state.issues = [];
+            state.error = action.error.message;
+        });
+        builder.addCase(deleteIssueById.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteIssueById.fulfilled, (state, action) => {
+            state.loading = false;
+            state.issues = state.issues = state.issues.filter(i => i.id !== action.payload);
+            state.error = '';
+        });
+        builder.addCase(deleteIssueById.rejected, (state, action) => {
+            state.loading = false;
             state.error = action.error.message;
         });
     }

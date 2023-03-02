@@ -123,7 +123,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.selectIssues = exports.issueSlice = exports.fetchIssuesByQuery = exports.deleteIssue = exports.default = exports.checkIssue = void 0;
+exports.selectIssues = exports.issueSlice = exports.fetchIssuesByQuery = exports.deleteIssueById = exports.deleteIssue = exports.default = exports.checkIssue = void 0;
 var _toolkit = require("@reduxjs/toolkit");
 const initialState = {
   loading: false,
@@ -134,7 +134,7 @@ const fetchIssuesByQuery = (0, _toolkit.createAsyncThunk)('issue/fetchIssuesByQu
   const jwt = await AP.context.getToken().then(token => {
     return token;
   });
-  return await fetch(`/search?jql=${query}%20order%20by%20created%20ASC&jwt=${jwt}`, {
+  return await fetch(`/search?${query}&jwt=${jwt}`, {
     method: "GET",
     'Accept': 'application/json'
   }).then(res => {
@@ -157,6 +157,18 @@ const fetchIssuesByQuery = (0, _toolkit.createAsyncThunk)('issue/fetchIssuesByQu
   }).catch(err => console.error(err));
 });
 exports.fetchIssuesByQuery = fetchIssuesByQuery;
+const deleteIssueById = (0, _toolkit.createAsyncThunk)('issue/deleteIssueById', async issueId => {
+  const jwt = await AP.context.getToken().then(token => {
+    return token;
+  });
+  return await fetch(`/issue/${issueId}?jwt=${jwt}`, {
+    method: "DELETE",
+    'Accept': 'application/json'
+  }).then(res => {
+    return issueId;
+  }).catch(err => console.error(err));
+});
+exports.deleteIssueById = deleteIssueById;
 const selectIssues = (state, isFiltered) => {
   if (isFiltered) {
     return state.issues.filter(i => !i.isChecked);
@@ -168,10 +180,6 @@ const issueSlice = (0, _toolkit.createSlice)({
   name: 'issue',
   initialState,
   reducers: {
-    deleteIssue: (state, action) => {
-      const issueId = action.payload;
-      state.issues = state.issues.filter(i => i.id !== issueId);
-    },
     checkIssue: (state, action) => {
       const index = action.payload;
       const element = state.issues.splice(index, 1)[0];
@@ -191,6 +199,18 @@ const issueSlice = (0, _toolkit.createSlice)({
     builder.addCase(fetchIssuesByQuery.rejected, (state, action) => {
       state.loading = false;
       state.issues = [];
+      state.error = action.error.message;
+    });
+    builder.addCase(deleteIssueById.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(deleteIssueById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.issues = state.issues = state.issues.filter(i => i.id !== action.payload);
+      state.error = '';
+    });
+    builder.addCase(deleteIssueById.rejected, (state, action) => {
+      state.loading = false;
       state.error = action.error.message;
     });
   }
@@ -279,7 +299,6 @@ const fetchStatuses = (0, _toolkit.createAsyncThunk)('status/fetchStatuses', asy
   const jwt = await AP.context.getToken().then(token => {
     return token;
   });
-  console.log('stat');
   const result = await fetch(`/statuses?jwt=${jwt}`, {
     method: "GET",
     headers: {
@@ -335,6 +354,7 @@ var _select = _interopRequireDefault(require("@atlaskit/select"));
 var _form = _interopRequireWildcard(require("@atlaskit/form"));
 var _textfield = _interopRequireDefault(require("@atlaskit/textfield"));
 var _spinner = _interopRequireDefault(require("@atlaskit/spinner"));
+var _inlineMessage = _interopRequireDefault(require("@atlaskit/inline-message"));
 var _reactRedux = require("react-redux");
 var _projectSlice = require("../src/features/projects/projectSlice");
 var _statusSlice = require("../src/features/statuses/statusSlice");
@@ -348,8 +368,7 @@ function _extends() { _extends = Object.assign ? Object.assign.bind() : function
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 const SearchForm = ({
-  setIsFirstSearch,
-  setIssuesPerPage
+  setIsFirstSearch
 }) => {
   const dispatch = (0, _reactRedux.useDispatch)();
   const project = (0, _reactRedux.useSelector)(state => state.project);
@@ -360,7 +379,6 @@ const SearchForm = ({
   }, []);
   const handleSubmit = data => {
     setIsFirstSearch();
-    setIssuesPerPage(data.issuesPerPage);
     let queryString = [];
     for (let key in data) {
       if (data[key].length && key !== 'issuesPerPage') {
@@ -368,15 +386,15 @@ const SearchForm = ({
         queryString = [...queryString, `${key}%20in%20(${params})`];
       }
     }
-    queryString = queryString.length ? queryString.join('%20AND%20') : '';
+    queryString = queryString.length ? `jql=${queryString.join('%20AND%20')}&maxResults=${data.issuesPerPage}` : `maxResults=${data.issuesPerPage}`;
     dispatch((0, _issueSlice.fetchIssuesByQuery)(queryString));
   };
   const validate = value => {
-    if (value < 5) {
-      return "LESS_THAN_FIVE";
+    if (value < 1) {
+      return "LESS_THAN_ONE";
     }
-    if (value > 15) {
-      return "MORE_THAN_FIFTEEN";
+    if (value > 200) {
+      return "MORE_THAN_TWO_HUNDRED";
     }
     return;
   };
@@ -392,7 +410,10 @@ const SearchForm = ({
   }, project.loading && status.loading && /*#__PURE__*/_react.default.createElement(_spinner.default, {
     interactionName: "load",
     size: "large"
-  }), !project.loading && !status.loading && project.projects.length ? /*#__PURE__*/_react.default.createElement(_form.default, {
+  }), (!project.loading || !status.loading) && !project.projects.length && /*#__PURE__*/_react.default.createElement(_inlineMessage.default, {
+    appearance: "warning",
+    title: "You don't have any projects yet"
+  }), (!project.loading || !status.loading) && !!project.projects.length && /*#__PURE__*/_react.default.createElement(_form.default, {
     onSubmit: data => handleSubmit(data)
   }, ({
     formProps,
@@ -437,17 +458,17 @@ const SearchForm = ({
     })));
   }), /*#__PURE__*/_react.default.createElement(_form.Field, {
     name: "issuesPerPage",
-    label: "Number of issues per page",
-    defaultValue: "5",
+    label: "Maximum number of tasks per page",
+    defaultValue: "50",
     validate: validate
   }, ({
     fieldProps,
     error
   }) => /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement(_textfield.default, _extends({}, fieldProps, {
     type: "number",
-    min: "5",
-    max: "15"
-  })), error === 'LESS_THAN_FIVE' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be grater than or equal to 5"), error === 'MORE_THAN_FIFTEEN' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be less than or equal to 15"))), /*#__PURE__*/_react.default.createElement(_form.FormFooter, null, /*#__PURE__*/_react.default.createElement(_buttonGroup.default, null, /*#__PURE__*/_react.default.createElement(_standardButton.default, {
+    min: "1",
+    max: "200"
+  })), error === 'LESS_THAN_ONE' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be grater than or equal to 1"), error === 'MORE_THAN_TWO_HUNDRED' && /*#__PURE__*/_react.default.createElement(_form.ErrorMessage, null, "Value must be less than or equal to 200"))), /*#__PURE__*/_react.default.createElement(_form.FormFooter, null, /*#__PURE__*/_react.default.createElement(_buttonGroup.default, null, /*#__PURE__*/_react.default.createElement(_standardButton.default, {
     appearance: "subtle",
     id: "form-reset",
     onClick: () => reset()
@@ -455,7 +476,7 @@ const SearchForm = ({
     appearance: "primary",
     id: "set-search-data",
     type: "submit"
-  }, "Find issues"))))) : /*#__PURE__*/_react.default.createElement("div", null, "You don't have any projects yet"));
+  }, "Find issues"))))));
 };
 var _default = SearchForm;
 exports.default = _default;
@@ -472,7 +493,6 @@ var _standardButton = _interopRequireDefault(require("@atlaskit/button/standard-
 var _trash = _interopRequireDefault(require("@atlaskit/icon/glyph/trash"));
 var _badge = _interopRequireDefault(require("@atlaskit/badge"));
 var _filter = _interopRequireDefault(require("@atlaskit/icon/glyph/filter"));
-var _spinner = _interopRequireDefault(require("@atlaskit/spinner"));
 var _reactRedux = require("react-redux");
 var _issueSlice = require("../src/features/issues/issueSlice");
 var _react = _interopRequireWildcard(require("react"));
@@ -486,23 +506,10 @@ function App() {
   const [highlightedRows, setHighlightedRows] = (0, _react.useState)([]);
   const [isFiltered, setIsFiltered] = (0, _react.useState)(false);
   const issuesList = (0, _reactRedux.useSelector)(state => (0, _issueSlice.selectIssues)(state.issue, isFiltered));
-  const [issuesPerPage, setIssuesPerPage] = (0, _react.useState)(null);
   const [isFirstSearch, setIsFirstSearch] = (0, _react.useState)(true);
-  let jwt;
-  const handleSetIssuesPerPage = number => {
-    setIssuesPerPage(number);
-  };
   const handleSetIsFirstSearch = () => {
     setIsFirstSearch(false);
   };
-
-  /* useEffect(() => {
-     AP.context.getToken(function(token){
-       console.log(token);
-       jwt = token;
-     });
-   }, [])*/
-
   (0, _react.useEffect)(() => {
     let rows = [];
     issue.issues.forEach((i, index) => {
@@ -515,8 +522,6 @@ function App() {
   const handleFilter = () => {
     setIsFiltered(!isFiltered);
   };
-
-  //rows with Redux data
   const rows = issuesList.map((issue, index) => {
     return {
       key: `issue-row-${issue.id}`,
@@ -546,9 +551,7 @@ function App() {
       }, {
         key: 'issue-row-checkbox',
         content: /*#__PURE__*/_react.default.createElement(_checkbox.Checkbox, {
-          value: "default checkbox"
-          //label="Default checkbox"
-          ,
+          value: "default checkbox",
           onChange: () => dispatch((0, _issueSlice.checkIssue)(index)),
           name: "checkbox-default",
           testId: "cb-default",
@@ -561,12 +564,11 @@ function App() {
           iconBefore: /*#__PURE__*/_react.default.createElement(_trash.default, {
             size: "small"
           }),
-          onClick: () => dispatch((0, _issueSlice.deleteIssue)(issue.id))
+          onClick: () => dispatch((0, _issueSlice.deleteIssueById)(issue.id))
         })
       }]
     };
   });
-  const caption = "TodoList Tasks";
   const head = {
     cells: [{
       key: 'issue-creator',
@@ -600,7 +602,6 @@ function App() {
       boxSizing: 'border-box'
     }
   }, /*#__PURE__*/_react.default.createElement(_SearchForm.default, {
-    setIssuesPerPage: handleSetIssuesPerPage,
     setIsFirstSearch: handleSetIsFirstSearch
   }), !issue.loading && issue.error ? /*#__PURE__*/_react.default.createElement("div", null, "Error: ", issue.error) : null, !isFirstSearch && /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
     style: {
@@ -614,7 +615,6 @@ function App() {
   }, buttonCaption)), /*#__PURE__*/_react.default.createElement(_dynamicTable.default, {
     head: head,
     rows: rows,
-    rowsPerPage: issuesPerPage,
     defaultPage: 1,
     loadingSpinnerSize: "small",
     isLoading: issue.loading,
