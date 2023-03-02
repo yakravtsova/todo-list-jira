@@ -45,7 +45,7 @@ export default function App() {
           key: 'issue-row-creator',
           content: (
             <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-              <img src={issue.avatar['24x24']} style={{borderRadius:'50%'}}/>
+              <img src={issue.avatar['24x24']} style={{borderRadius:'50%', width: '24px', height: '24px'}}/>
               <strong>{issue.name}</strong>
             </div>
           )

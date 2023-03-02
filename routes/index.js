@@ -30,7 +30,6 @@ export default function routes(app, addon) {
     );
 
     app.delete('/issue/:issueId', tokenCheck(), (req, res) => {
-      console.log('aha');
       let queryString = req.originalUrl;
       queryString = queryString.slice(0, queryString.indexOf('jwt=')-1);
       const httpClient = addon.httpClient(req);

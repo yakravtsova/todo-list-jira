@@ -10,7 +10,7 @@
         "installed": "/installed"
     },
     "scopes": [
-        "READ"
+        "READ", "DELETE"
     ],
     "apiMigrations":{
         "signed-install": true

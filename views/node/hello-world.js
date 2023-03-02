@@ -526,7 +526,9 @@ function App() {
         }, /*#__PURE__*/_react.default.createElement("img", {
           src: issue.avatar['24x24'],
           style: {
-            borderRadius: '50%'
+            borderRadius: '50%',
+            width: '24px',
+            height: '24px'
           }
         }), /*#__PURE__*/_react.default.createElement("strong", null, issue.name))
       }, {
