@@ -60,7 +60,7 @@ const SearchForm = ({setIsFirstSearch}) => {
       }}
     >
       {project.loading && status.loading && <Spinner interactionName="load" size="large" />}
-      {(!project.loading || !status.loading) && !project.projects.length && 
+      {(!project.loading || !status.loading) && !project.projects.length &&
         <InlineMessage appearance="warning" title="You don't have any projects yet"/>}
       {(!project.loading || !status.loading) && !!project.projects.length && <Form onSubmit={(data) => handleSubmit(data)}>
         {({ formProps, reset }) => (
@@ -78,7 +78,7 @@ const SearchForm = ({setIsFirstSearch}) => {
             >
               {({ fieldProps: { id, ...rest } }) => (
                 <Fragment>
-                  <Select inputId={id} {...rest} options={project.projects} isMulti />
+                  <Select inputId={id} {...rest} options={project.projects} placeholder="All projects" isMulti />
                 </Fragment>
               )}
             </Field>
@@ -89,7 +89,7 @@ const SearchForm = ({setIsFirstSearch}) => {
             >
               {({ fieldProps: { id, ...rest } }) => (
                 <Fragment>
-                  <Select inputId={id} {...rest} options={status.statuses} isMulti />
+                  <Select inputId={id} {...rest} options={status.statuses} placeholder="All statuses" isMulti />
                 </Fragment>
               )}
             </Field>

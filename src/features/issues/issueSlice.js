@@ -11,7 +11,7 @@ export const fetchIssuesByQuery = createAsyncThunk('issue/fetchIssuesByQuery', a
     .then((token) => {
       return token
     });
-    
+
     return await fetch(`/search?${query}&jwt=${jwt}`, {
         method: "GET",
         'Accept': 'application/json'
@@ -44,7 +44,7 @@ export const deleteIssueById = createAsyncThunk('issue/deleteIssueById', async (
     .then((token) => {
       return token
     });
-    
+
     return await fetch(`/issue/${issueId}?jwt=${jwt}`, {
         method: "DELETE",
         'Accept': 'application/json'
@@ -58,7 +58,7 @@ export const deleteIssueById = createAsyncThunk('issue/deleteIssueById', async (
 
 export const selectIssues = (state, isFiltered) => {
     if (isFiltered) {
-        return state.issues.filter(i => !i.isChecked)
+        return state.issues.filter(i => i.isChecked)
     }
     return state.issues;
 };
@@ -68,8 +68,8 @@ export const issueSlice = createSlice({
     initialState,
     reducers: {
         checkIssue: (state, action) => {
-            const index = action.payload;
-            const element = state.issues.splice(index, 1)[0];
+            const issueId = action.payload;
+            const element = state.issues.splice(state.issues.findIndex(i => i.id === issueId), 1)[0];
             element.isChecked = !element.isChecked;
             state.issues = element.isChecked ? [...state.issues, element] : [element, ...state.issues];
         },

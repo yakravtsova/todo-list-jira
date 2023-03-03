@@ -171,7 +171,7 @@ const deleteIssueById = (0, _toolkit.createAsyncThunk)('issue/deleteIssueById', 
 exports.deleteIssueById = deleteIssueById;
 const selectIssues = (state, isFiltered) => {
   if (isFiltered) {
-    return state.issues.filter(i => !i.isChecked);
+    return state.issues.filter(i => i.isChecked);
   }
   return state.issues;
 };
@@ -181,8 +181,8 @@ const issueSlice = (0, _toolkit.createSlice)({
   initialState,
   reducers: {
     checkIssue: (state, action) => {
-      const index = action.payload;
-      const element = state.issues.splice(index, 1)[0];
+      const issueId = action.payload;
+      const element = state.issues.splice(state.issues.findIndex(i => i.id === issueId), 1)[0];
       element.isChecked = !element.isChecked;
       state.issues = element.isChecked ? [...state.issues, element] : [element, ...state.issues];
     }
@@ -431,6 +431,7 @@ const SearchForm = ({
     inputId: id
   }, rest, {
     options: project.projects,
+    placeholder: "All projects",
     isMulti: true
   })))), /*#__PURE__*/_react.default.createElement(_form.Field, {
     name: "status",
@@ -445,6 +446,7 @@ const SearchForm = ({
     inputId: id
   }, rest, {
     options: status.statuses,
+    placeholder: "All statuses",
     isMulti: true
   })))), /*#__PURE__*/_react.default.createElement(_form.Field, {
     name: "issuesPerPage",
@@ -544,7 +546,7 @@ function App() {
         key: 'issue-row-checkbox',
         content: /*#__PURE__*/_react.default.createElement(_checkbox.Checkbox, {
           value: "default checkbox",
-          onChange: () => dispatch((0, _issueSlice.checkIssue)(index)),
+          onChange: () => dispatch((0, _issueSlice.checkIssue)(issue.id)),
           name: "checkbox-default",
           testId: "cb-default",
           isChecked: issue.isChecked

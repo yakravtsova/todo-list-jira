@@ -37625,7 +37625,7 @@ exports.deleteIssueById = deleteIssueById;
 var selectIssues = function selectIssues(state, isFiltered) {
   if (isFiltered) {
     return state.issues.filter(function (i) {
-      return !i.isChecked;
+      return i.isChecked;
     });
   }
   return state.issues;
@@ -37636,8 +37636,10 @@ var issueSlice = (0, _toolkit.createSlice)({
   initialState: initialState,
   reducers: {
     checkIssue: function checkIssue(state, action) {
-      var index = action.payload;
-      var element = state.issues.splice(index, 1)[0];
+      var issueId = action.payload;
+      var element = state.issues.splice(state.issues.findIndex(function (i) {
+        return i.id === issueId;
+      }), 1)[0];
       element.isChecked = !element.isChecked;
       state.issues = element.isChecked ? [].concat(_toConsumableArray(state.issues), [element]) : [element].concat(_toConsumableArray(state.issues));
     }
@@ -37787,6 +37789,7 @@ var SearchForm = function SearchForm(_ref) {
         inputId: id
       }, rest, {
         options: project.projects,
+        placeholder: "All projects",
         isMulti: true
       })));
     }), /*#__PURE__*/_react.default.createElement(_form.Field, {
@@ -37801,6 +37804,7 @@ var SearchForm = function SearchForm(_ref) {
         inputId: id
       }, rest, {
         options: status.statuses,
+        placeholder: "All statuses",
         isMulti: true
       })));
     }), /*#__PURE__*/_react.default.createElement(_form.Field, {

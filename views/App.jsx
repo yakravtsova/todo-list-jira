@@ -73,7 +73,7 @@ export default function App() {
           content: (
           <Checkbox
             value="default checkbox"
-            onChange={() => dispatch(checkIssue(index))}
+            onChange={() => dispatch(checkIssue(issue.id))}
             name="checkbox-default"
             testId="cb-default"
             isChecked={issue.isChecked}
