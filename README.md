@@ -14,3 +14,31 @@
 ## Установка приложения
 
 Приложение размещено на платформе Heroku и доступно для установки в Jira Cloud по ссылке: https://teamlead-todolist.herokuapp.com/atlassian-connect.json.
+
+1. Войдите на свой сайт Jira Software. На верхней панели навигации выберите раскрывающийся список Apps (Приложения) и нажмите Manage your apps (Управлять приложениями).
+2. На загрузившейся странице нажмите Settings (Настройки). В появившемся модальном окне выберите пункт Enable development mode и нажмите кнопку Apply.
+3. Нажмите на Upload app (Загрузить приложение), вставьте в текстовое поле адрес https://teamlead-todolist.herokuapp.com/atlassian-connect.json и нажмите кнопку Upload.
+4. После окончания установки обновите страницу и выберите раскрывающийся список App (Приложения) на верхней панели навигации. Нажмите на Teamlead TodoList и начинайте использовать приложение.
+
+## Технологии
+
+* Atlassian Connect Express
+* Atlaskit
+* React
+* Redux Toolkit
+
+### Инструкция по развёртыванию проекта:
+
+```bash
+# клонирование репозитория
+$ git clone https://github.com/yakravtsova/todo-list-jira.git
+
+# установка зависимостей
+$ npm install
+
+# запуск develop-сборки бэкенда
+$ npm start
+
+# запуск develop-сборки фронтенда
+$ npm run watch-jsx
+```
