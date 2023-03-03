@@ -1,16 +1,16 @@
-# Atlassian Connect App using Express
+# Jira todo list
 
-Congratulations!
-You've successfully created an Atlassian Connect App using the Express web application framework.
+[Тестовое задание](https://docs.google.com/document/d/1b4J5MhSld-3Rde36J_54MhuC9CCJeRPXHSkSjQ0gVsI/edit) на позицию веб-разработчика.
 
-## What's next?
+## Основной функционал:
+* поиск и вывод на страницу списка задач из ваших проектов Jira;
+* возможность поиска задач по проектам и по статусам;
+* возможность ограничить количество задач, выводимых на страницу;
+* удаление задачи из списка и из проекта Jira по нажатию на кнопку удаления;
+* каждая задача имеет чекбокс. Задачи с активным чекбоксом переносятся в конец списка;
+* при нажатии на кнопку фильтра в списке остаются только задачи, помеченные чекбоксом;
+* при отжатии кнопки в списке снова отображаются все задачи.
 
-[Read the docs](https://bitbucket.org/atlassian/atlassian-connect-express/src/master/README.md).
+## Установка приложения
 
-## Releasing new changes
-
-See all branches: https://bitbucket.org/atlassian/atlassian-connect-express-template/branches/
-
-`master` branch is for products jira, jira-service-desk, and confluence; `bitbucket` branch is for product bitbucket. When updating `master`, please also update `bitbucket` if neccessary.
-
-The branches will be downloaded by: https://bitbucket.org/atlassian/atlas-connect
+Приложение размещено на платформе Heroku и доступно для установки в Jira Cloud по ссылке: https://teamlead-todolist.herokuapp.com/atlassian-connect.json.

@@ -52939,17 +52939,18 @@ function App() {
   };
   (0, _react.useEffect)(function () {
     var rows = [];
-    issue.issues.forEach(function (i, index) {
+    issuesList.forEach(function (i, index) {
       if (i.isChecked) {
         rows = [].concat(_toConsumableArray(rows), [index]);
       }
     });
+    console.log('check');
     setHighlightedRows(rows);
-  }, [issue.issues]);
+  }, [issue.issues, isFiltered]);
   var handleFilter = function handleFilter() {
     setIsFiltered(!isFiltered);
   };
-  var rows = issuesList.map(function (issue, index) {
+  var rows = issuesList.map(function (issue) {
     return {
       key: "issue-row-".concat(issue.id),
       cells: [{

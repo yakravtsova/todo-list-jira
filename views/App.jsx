@@ -25,19 +25,20 @@ export default function App() {
 
   useEffect(() => {
     let rows = [];
-    issue.issues.forEach((i, index) => {
+    issuesList.forEach((i, index) => {
       if (i.isChecked) {
         rows = [...rows, index]
       }
     });
+    console.log('check')
     setHighlightedRows(rows)
-  }, [issue.issues]);
+  }, [issue.issues, isFiltered]);
 
   const handleFilter = () => {
     setIsFiltered(!isFiltered);
   }
 
-  const rows = issuesList.map((issue, index) => {
+  const rows = issuesList.map((issue) => {
     return {
       key : `issue-row-${issue.id}`,
       cells : [
